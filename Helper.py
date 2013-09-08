@@ -1,5 +1,7 @@
 import sys
 import os
+from GameState import *
+from IBot import *
 
 class Helper:
     """Hilfsklasse welche die Verarbeitungsschleife implementiert."""
@@ -13,9 +15,9 @@ class Helper:
             line=sys.stdin.readline()
             while(line):
                 if( "go" in line ):
-                    ps = GameState(message)
-                    bot.doTurn(pw)
-                    pw.finishTurn()
+                    gs = GameState(message)
+                    bot.doTurn(gs)
+                    gs.finishTurn()
                     message=""
                 elif( "name?" in line ):
                     print bot.getName()

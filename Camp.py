@@ -46,3 +46,6 @@ class Camp:
         """Liefert die Y-Koordinate des Camps. """
         return self.__y
 
+    ## fuer Testzwecken.
+    def __str__(self):
+        return "Camp id:%d owner:%d man:%d size:%d (%d:%d)"%(self.__id,self.__owner,self.__mancount,self.__size,self.__x, self.__y)
