@@ -3,7 +3,7 @@ from Army import *
 import sys
 
 class GameState:
-    """Diese Klasse repräsentiert den aktuellen Spielzustand."""
+    """Diese Klasse repraesentiert den aktuellen Spielzustand."""
 
     def __init__(self, gameStateString):
         """Zur Initialisierung muss ein Spielzustandstring übergeben werden."""
@@ -13,8 +13,8 @@ class GameState:
 
 
     def calculateDistance(source, destination):
-        """Ermittelt den Abstand zwischen zwei Camps, aufgerundend zur nächsten
-           höheren Ganzzahl. Diese Zahl gibt die Anzahl von Zügen an die benötigt
+        """Ermittelt den Abstand zwischen zwei Camps, aufgerundend zur naechsten
+           hoeheren Ganzzahl. Diese Zahl gibt die Anzahl von Zügen an die benoetigt
            wird um die Strecke zurückzulegen."""
         dx = source.getX() - destination.getX();
         dy = source.getY() - destination.getY();
@@ -28,7 +28,7 @@ class GameState:
     
     def getArmy(self, id):
         """Ermittelt die Armee mit der übergebenen ID. Die erste Armee beginnt dabei
-           mit der 0. Achtung: Die ID kann sich von Zug zu Zug ändern, da sie nicht
+           mit der 0. Achtung: Die ID kann sich von Zug zu Zug aendern, da sie nicht
            eindeutig vergeben wird. """
         return self.__armies[id];
         
@@ -67,7 +67,7 @@ class GameState:
         return r
 
     def getNeutralCamps(self):
-        """Ermittelt alle neutralen Camps. D.h. Camps die derzeit keinem Spieler gehören. """
+        """Ermittelt alle neutralen Camps. D.h. Camps die derzeit keinem Spieler gehoeren. """
         r = []
         for p in self.__camps:
             if(p.getOwner() == 0):
@@ -91,7 +91,7 @@ class GameState:
         return len(self.__camps)
     
     def getProduction(self, playerID):
-        """Ermittelt die Anzahl Einheiten die ein Spieler pro Zug generiert/erhält. """
+        """Ermittelt die Anzahl Einheiten die ein Spieler pro Zug generiert/erhaelt. """
         prod=0
         for p in self.__camps:
             if( p.getOwner() == playerID ):
@@ -99,8 +99,8 @@ class GameState:
         return prod
     
     def getTotalMancount(self, playerID):
-        """Ermittelt die maximale Truppenstärke eines Spielers. Dabei werden alle
-           Einheiten in dem Camps und unterwegs gezählt. """
+        """Ermittelt die maximale Truppenstaerke eines Spielers. Dabei werden alle
+           Einheiten in dem Camps und unterwegs gezaehlt. """
         count=0
         for camp in self.__camps:
             if( camp.getOwner() == playerID ):
@@ -121,9 +121,9 @@ class GameState:
         return False
     
     def issueOrder(self, source, dest, mancount):
-        """Sendet eine Truppe von einem Camp zu einem anderen. Pro Zug können
+        """Sendet eine Truppe von einem Camp zu einem anderen. Pro Zug koennen
            beliebig viele Truppenbewegungen gestartet werden. Eine Truppenbewegung
-           kann nicht gestoppt oder geändert werden. """
+           kann nicht gestoppt oder geaendert werden. """
         print "%d %d %d"%(source.getID(), dest.getID(), mancount);
         sys.stdout.flush()
     

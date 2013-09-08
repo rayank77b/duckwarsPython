@@ -1,6 +1,6 @@
 
 class Army:
-    """Repräsentiert eine Armee die auf dem Weg zu einem anderen Camp ist."""
+    """Repraesentiert eine Armee die auf dem Weg zu einem anderen Camp ist."""
     
     def __init__(self, armyOwner, armySize, armySource, armyDestination, tripLength, remaining):
         """Konstruktor"""
@@ -10,17 +10,17 @@ class Army:
         self.__destination = armyDestination
         self.__turnsRemaining = remaining
         self.__tripDuration = tripLength
-    
+        
     def getDestination(self):
         """Liefert die ID des Zielcamps."""
         return self.__destination
     
     def getMancount(self):
-        """Liefert die Mannstärke der Armee."""
+        """Liefert die Mannstaerke der Armee."""
         return self.__mancount
     
     def getOwner(self):
-        """Liefert den Spieler dem die Armee gehört. """
+        """Liefert den Spieler dem die Armee gehoert. """
         return self.__owner
     
     def getSource(self):
