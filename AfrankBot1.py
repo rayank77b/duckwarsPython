@@ -1,7 +1,4 @@
-from Army import *
-from Camp import *
-from GameState import *
-from Helper import *
+from DuckwarsApi import *
 
 import math
 

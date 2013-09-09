@@ -7,9 +7,7 @@ import os
 
 import unittest 
 
-from Army import *
-from Camp import *
-from GameState import *
+from DuckwarsApi import *
 
 # test Army
 class ArmyTest(unittest.TestCase):
