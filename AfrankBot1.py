@@ -19,9 +19,13 @@ def calculateDistances(camps):
                 r[x][y]=calculateDistance(camps[x], camps[y])
     return r
 
+def getMinDistance(matrix, id):
+    """ return the distance of two camps"""
+    return min(matrix[id])
+    
 def getNearestCamp(matrix, id):
     """return the id of the nearest capmp with id"""
-    return min(matrix[id])
+    return matrix[id].index(min(matrix[id]))
 
 def sendHalfMenIfFull(st, fromCamp, toCamp):
     if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
