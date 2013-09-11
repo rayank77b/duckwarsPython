@@ -21,7 +21,7 @@ def calculateDistances(camps):
 
 def getNearestCamp(matrix, id):
     """return the id of the nearest capmp with id"""
-    pass
+    return min(matrix[id])
 
 def sendHalfMenIfFull(st, fromCamp, toCamp):
     if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
