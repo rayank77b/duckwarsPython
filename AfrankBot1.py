@@ -4,27 +4,24 @@ import math
 import time
 
 def calculateDistance(source, destination):
-    dx = source.getX() - destination.getX();
-    dy = source.getY() - destination.getY();
+    dx = source.getX() - destination.getX()
+    dy = source.getY() - destination.getY()
     return int(dx * dx + dy * dy)
 
-def getNearestCamp(mycamp, camps):
-    c=None
-    distance=9999999
-    for o in camps:
-        d=calculateDistance(mycamp, o)
-        if((d<distance)and (d>0)):
-            c=o
-            distance=d
-    return c
-
 def calculateDistances(camps):
+    """calculate for all camps an array [][], ditances.
+        the matrix has then the distances beetwen the camps"""
     size=len(camps)
     r= [[9999999 for col in range(size)] for row in range(size)]
     for x in range(size):
         for y in range(size):
             if(x!=y):
-                r[x][y]=getNearestCamp(camps[x], camps[y])
+                r[x][y]=calculateDistance(camps[x], camps[y])
+    return r
+
+def getNearestCamp(matrix, id):
+    """return the id of the nearest capmp with id"""
+    pass
 
 def sendHalfMenIfFull(st, fromCamp, toCamp):
     if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
