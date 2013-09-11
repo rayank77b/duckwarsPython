@@ -27,6 +27,17 @@ def getNearestCamp(matrix, id):
     """return the id of the nearest capmp with id"""
     return matrix[id].index(min(matrix[id]))
 
+def getNearesOtherCamp(mycamp, camps):
+    """ return the id of the neares camp, which not belong to me"""
+    c=None
+    distance=9999999
+    for o in camps:
+        d=calculateDistance(mycamp, o)
+        if((d<distance)and (d>0)):
+            c=o
+            distance=d
+    return c     
+
 def sendHalfMenIfFull(st, fromCamp, toCamp):
     if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
         sendMen = fromCamp.getMancount()/2
@@ -34,20 +45,22 @@ def sendHalfMenIfFull(st, fromCamp, toCamp):
 
 class AfrankBot1(IBot):
     def doTurn(self, gamestate):
-        #t1 = time.time()
+        t1 = time.time()
         myCamps = gamestate.getMyCamps()
+        allCamps = gamestate.getCamps()
+        notMyCamps = gamestate.getNotMyCamps()
+        distances=calculateDistances(allCamps)
         for c in myCamps:
-            camps = gamestate.getNotMyCamps()
-            n = getNearestCamp(c, camps)
+            n = getNearesOtherCamp(c, notMyCamps)
             if(n!=None):
                 sendHalfMenIfFull(gamestate, c, n)
             #else:
             #    n = getNearestCamp(c, myCamps)
             #    if(n!=None):
             #        sendHalfMenIfFull(gamestate, c, n)
-        #t2 = time.time()
-        #d = (t2-t1)*1000000
-        #print "%d us"%d
+        t2 = time.time()
+        d = (t2-t1)*1000000
+        print "doTurn() %d us"%d
     
     def getName(self):
         return "AfrankBot1"

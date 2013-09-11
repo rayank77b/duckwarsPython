@@ -34,6 +34,11 @@ def createCamps():
     camps.append(Camp(19, 1,20,5,621,28))
     return camps
 
+def createGameState():
+    message="C 2 2 1 40 3\nC 20 2 3 40 3\nC 2 20 4 40 3\nC 20 20 2 40 3\nC 5 2 0 5 1\nC 2 5 0 5 1\nC 5 5 0 15 1\nC 17 2 0 5 1\nC 20 5 0 5 1\nC 17 5 0 15 1\nC 2 17 0 5 1\nC 5 20 0 5 1\nC 5 17 0 15 1\nC 20 17 0 5 1\nC 17 20 0 5 1\nC 17 17 0 15 1\nC 11 6 0 25 2\nC 6 11 0 25 2\nC 16 11 0 25 2\nC 11 16 0 25 2\nC 11 11 0 50 3\n"
+    gs = GameState(message)
+    return gs
+
 class AfrankBotTest(unittest.TestCase):
     def test_calculateDistance(self):
         #  = Camp(id, campOwner, campMancount, campSize, posX, posY)
@@ -51,7 +56,7 @@ class AfrankBotTest(unittest.TestCase):
         distances=calculateDistances(camps)
         t2 = time.time()
         dif = (t2-t1)*1000000
-        print "%d us"%dif
+        #print "%d us"%dif
         for d in distances:
             for x in d:
                 if x==0:
@@ -78,7 +83,12 @@ class AfrankBotTest(unittest.TestCase):
         self.failUnlessEqual(getNearestCamp(distances,18),10)
         self.failUnlessEqual(getNearestCamp(distances,1),2)
 
-
+    def test_AfrankBot(self):
+        bot = AfrankBot1()
+        self.failUnlessEqual(bot.getName(),"AfrankBot1")
+        gs=createGameState()
+        print "Camps size: %d"%gs.getNumCamps()
+        bot.doTurn(gs)
 
 
 
