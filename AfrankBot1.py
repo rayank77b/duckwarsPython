@@ -3,6 +3,9 @@ from DuckwarsApi import *
 import math
 import time
 
+
+distances=None
+
 def calculateDistance(source, destination):
     dx = source.getX() - destination.getX()
     dy = source.getY() - destination.getY()
@@ -12,55 +15,70 @@ def calculateDistances(camps):
     """calculate for all camps an array [][], ditances.
         the matrix has then the distances beetwen the camps"""
     size=len(camps)
-    r= [[9999999 for col in range(size)] for row in range(size)]
+    global distances
+    distances= [[9999999 for col in range(size)] for row in range(size)]
     for x in range(size):
         for y in range(size):
             if(x!=y):
-                r[x][y]=calculateDistance(camps[x], camps[y])
-    return r
+                distances[x][y]=calculateDistance(camps[x], camps[y])
 
-def getMinDistance(matrix, id):
+def getDistance(myid, campid):
+    return distances[myid][campid]
+
+def getMinDistance(id):
     """ return the distance of two camps"""
-    return min(matrix[id])
+    return min(distances[id])
     
 def getNearestCamp(matrix, id):
     """return the id of the nearest capmp with id"""
-    return matrix[id].index(min(matrix[id]))
+    return distances[id].index(min(distances[id]))
 
-def getNearesOtherCamp(mycamp, camps):
+def getNextOtherCamp(gs, id):
     """ return the id of the neares camp, which not belong to me"""
+    ocs = gs.getNotMyCamps()
     c=None
-    distance=9999999
-    for o in camps:
-        d=calculateDistance(mycamp, o)
-        if((d<distance)and (d>0)):
+    dis=9999999
+    #print distances
+    for o in ocs:
+        d = getDistance(id, o.getID())
+        if d<dis :
+            dis=d
             c=o
-            distance=d
-    return c     
+    return c
 
-def sendHalfMenIfFull(st, fromCamp, toCamp):
+def sendHalfMenIfFull(gs, fromCamp, toCamp):
     if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
         sendMen = fromCamp.getMancount()/2
-        st.issueOrder(fromCamp, toCamp, sendMen)
+        gs.issueOrder(fromCamp, toCamp, sendMen)
 
 class AfrankBot1(IBot):
+
+    def __init__(self):
+        self.firstTurn=True
+    
     def doTurn(self, gamestate):
-        t1 = time.time()
-        myCamps = gamestate.getMyCamps()
-        allCamps = gamestate.getCamps()
-        notMyCamps = gamestate.getNotMyCamps()
-        distances=calculateDistances(allCamps)
-        for c in myCamps:
-            n = getNearesOtherCamp(c, notMyCamps)
-            if(n!=None):
-                sendHalfMenIfFull(gamestate, c, n)
-            #else:
-            #    n = getNearestCamp(c, myCamps)
-            #    if(n!=None):
-            #        sendHalfMenIfFull(gamestate, c, n)
-        t2 = time.time()
-        d = (t2-t1)*1000000
-        print "doTurn() %d us"%d
+        if(self.firstTurn):
+            # berechne alles, was statisch ist, bzw welche map, welche strategie
+            allcamps=gamestate.getCamps()
+            calculateDistances(allcamps)
+            self.firstTurn=False
+            #print getDistance(3, 1)
+        else:
+            #t1 = time.time()
+            myCamps = gamestate.getMyCamps()
+            allCamps = gamestate.getCamps()
+            notMyCamps = gamestate.getNotMyCamps()
+            for c in myCamps:
+                n = getNextOtherCamp(gamestate, c.getID())
+                if(n!=None):
+                    sendHalfMenIfFull(gamestate, c, n)
+                #else:
+                #    n = getNearestCamp(c, myCamps)
+                #    if(n!=None):
+                #        sendHalfMenIfFull(gamestate, c, n)
+            #t2 = time.time()
+            #d = (t2-t1)*1000000
+            #print "doTurn() %d us"%d
     
     def getName(self):
         return "AfrankBot1"

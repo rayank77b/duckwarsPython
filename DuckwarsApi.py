@@ -279,5 +279,5 @@ class Helper:
                     message=message+line+os.linesep
                 line=sys.stdin.readline()
         except Exception as e:
-            sys.stderr.write("shit happens")
-            #print e
+            sys.stderr.write("shit happens : ")
+            print e
