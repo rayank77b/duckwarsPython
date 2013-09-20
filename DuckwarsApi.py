@@ -32,6 +32,12 @@ class Camp:
     
     def getGrowthrate(self):
         """Liefert die Wachstumsrate um der die Anzahl Maenner pro Runde steigt. """
+        if (self.__owner == 0):
+            return 0
+        if (self.__mancount == self.getMaxMancount()):
+            return 0
+        if (self.__mancount > self.getMaxMancount()):
+            return -1
         return 1 + self.__mancount/20
     
     def getOwner(self):
