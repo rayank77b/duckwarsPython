@@ -76,7 +76,7 @@ class GameStateTest(unittest.TestCase):
         self.failUnlessEqual(2, c2.getID())
         self.failUnlessEqual(10,c2.getMancount())
         self.failUnlessEqual(60,c2.getMaxMancount())
-        self.failUnlessEqual((1+10/20),c2.getGrowthrate())
+        self.failUnlessEqual((1+20/20),c1.getGrowthrate())  # fehlerhaft, die rate 
         self.failUnlessEqual(0,c2.getOwner())
         self.failUnlessEqual(3,c2.getSize())
         self.failUnlessEqual(11, c2.getX())
@@ -88,7 +88,7 @@ class GameStateTest(unittest.TestCase):
         self.failUnlessEqual(2, c2.getID())
         self.failUnlessEqual(10,c2.getMancount())
         self.failUnlessEqual(60,c2.getMaxMancount())
-        self.failUnlessEqual((1+10/20),c2.getGrowthrate())
+        self.failUnlessEqual(0,c2.getGrowthrate()) # neutraler camp hat keine rate
         self.failUnlessEqual(0,c2.getOwner())
         self.failUnlessEqual(3,c2.getSize())
         self.failUnlessEqual(11, c2.getX())
@@ -100,6 +100,7 @@ class GameStateTest(unittest.TestCase):
         self.failUnlessEqual(1, c2.getID())
         self.failUnlessEqual(20,c2.getMancount())
         self.failUnlessEqual(40,c2.getMaxMancount())
+        #print c2
         self.failUnlessEqual((1+20/20),c2.getGrowthrate())
         self.failUnlessEqual(2,c2.getOwner())
         self.failUnlessEqual(2,c2.getSize())
@@ -124,7 +125,7 @@ class GameStateTest(unittest.TestCase):
         self.failUnlessEqual(2, c2.getID())
         self.failUnlessEqual(10,c2.getMancount())
         self.failUnlessEqual(60,c2.getMaxMancount())
-        self.failUnlessEqual((1+10/20),c2.getGrowthrate())
+        self.failUnlessEqual(0,c2.getGrowthrate())
         self.failUnlessEqual(0,c2.getOwner())
         self.failUnlessEqual(3,c2.getSize())
         self.failUnlessEqual(11, c2.getX())
@@ -161,6 +162,12 @@ class GameStateTest(unittest.TestCase):
         distance = gs.calculateDistance(c0, c3)
         self.failUnlessEqual(5,distance)
         
+        src = gs.getCamp(0)
+        dst = gs.getCamp(2)
+        gs.issueOrder(src,dst, 2)
+        self.failUnlessEqual(gs.getNumArmies(), 3)
+        c0 = gs.getCamp(0)
+        self.failUnlessEqual(18, c0.getMancount())
 
 
 if __name__ == "__main__": 

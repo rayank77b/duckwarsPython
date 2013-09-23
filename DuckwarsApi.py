@@ -25,7 +25,10 @@ class Camp:
     def getMancount(self):
         """Liefert die Mannstaerke des Camps. """
         return self.__mancount
-    
+    def setMancount(self, cnt):
+        """Aendert die Mannstaerke des Camps."""
+        self.__mancount=cnt
+        
     def getMaxMancount(self):
         """Liefert die maximale Anzahl Maenner die dieses Camp aufnehmen kann. """
         return self.__size * 20
@@ -219,6 +222,9 @@ class GameState:
         """Sendet eine Truppe von einem Camp zu einem anderen. Pro Zug koennen
            beliebig viele Truppenbewegungen gestartet werden. Eine Truppenbewegung
            kann nicht gestoppt oder geaendert werden. """
+        source.setMancount(source.getMancount() - mancount)
+        dist = self.calculateDistance(source, dest)
+        self.__armies.append(Army(1, mancount, source.getID(), dest.getID(), dist, dist))
         print "%d %d %d"%(source.getID(), dest.getID(), mancount);
         sys.stdout.flush()
     
