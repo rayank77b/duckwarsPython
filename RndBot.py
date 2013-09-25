@@ -24,3 +24,6 @@ class RndBot(CalcArmy.CalcArmy):
                     a=self.data.sendArmy(src, dst, self.max)
                     armies.append(a)
         self.data.sendAll(armies)
+
+    def getName(self):
+        return "Rnd Bot %d"%self.max

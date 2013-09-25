@@ -3,8 +3,8 @@ C_Y=1
 C_OWNER=2
 C_CNT=3
 C_SIZE=4
-C_ARMY=6
-C_DIST=7
+C_ARMY=5
+C_DIST=6
 
 A_OWNER=0
 A_CNT=1
@@ -22,3 +22,6 @@ A_REM=5
     ], 
 -99999
 ], 
+
+nC 2 2 1 42 3\
+

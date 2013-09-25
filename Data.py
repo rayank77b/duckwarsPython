@@ -93,7 +93,7 @@ class Data:
         a=[]
         for x in armies:
             a.append(x)
-        self.send.append([a,-99999])
+        self.send.append(a)
 
     def __str__(self):
         camps=str(len(self.camps))+str(self.camps)

@@ -20,4 +20,6 @@ class SendHalfToNext(CalcArmy.CalcArmy):
                 a=self.data.sendArmy(src, dst, cnt)
                 armies.append(a)
         self.data.sendAll(armies)
-                
+
+    def getName(self):
+        return "SendHalfToNext"
