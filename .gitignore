@@ -1,2 +1,3 @@
 *.pyc
-sandbox/results
+sandbox/results/*
+sandbox/*.pyc
