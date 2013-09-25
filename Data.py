@@ -7,9 +7,8 @@ C_Y=1
 C_OWNER=2
 C_CNT=3
 C_SIZE=4
-C_RATE=5
-C_ARMY=6
-C_DIST=7
+C_ARMY=5
+C_DIST=6
 # Army constants
 A_OWNER=0
 A_CNT=1
@@ -40,14 +39,13 @@ class Data:
         self.send=[] # send store [army to send, result of simulation]
         
         for id in range(campslen):
-            c=[0,0,0,0,0,0,[],[]]
+            c=[0,0,0,0,0,[],[]]
             camp=gs.getCamp(id)
             c[C_X]=camp.getX()
             c[C_Y]=camp.getY()
             c[C_OWNER]=camp.getOwner()
             c[C_CNT]=camp.getMancount()
             c[C_SIZE]=camp.getSize()
-            c[C_RATE]=camp.getGrowthrate()
             self.camps.append(c)
     
         for id in range(campslen):
@@ -65,9 +63,8 @@ class Data:
             camp=gs.getCamp(id)
             self.camps[id][C_OWNER]=camp.getOwner()
             self.camps[id][C_CNT]=camp.getMancount()
-            self.camps[id][C_RATE]=camp.getGrowthrate()
         for i in range(armieslen):
-            a=[0,0,0,0,0,0,0]
+            a=[0,0,0,0,0,0]
             army=gs.getArmy(i)
             a[A_OWNER]=army.getOwner()
             a[A_CNT]=army.getMancount()
@@ -83,7 +80,7 @@ class Data:
         return int(math.ceil(math.sqrt(diff)))
 
     def sendArmy(self, srcid, dstid, cnt):
-        a=[0,0,0,0,0,0,0]
+        a=[0,0,0,0,0,0]
         a[A_OWNER]=1
         a[A_CNT]=cnt
         a[A_SRC]=srcid; a[A_DST]=dstid
@@ -92,5 +89,13 @@ class Data:
         a[A_REM]=trip
         return a
 
+    def sendAll(self, armies):
+        a=[]
+        for x in armies:
+            a.append(x)
+        self.send.append([a,-99999])
+
     def __str__(self):
-        return str(len(self.camps))+str(self.camps)
+        camps=str(len(self.camps))+str(self.camps)
+        send="len: "+str(len(self.send))+" data: "+str(self.send)
+        return "camps: "+camps+"\nsend: "+send+"\n"
