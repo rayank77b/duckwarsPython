@@ -50,6 +50,9 @@ class DataTest(unittest.TestCase):
         bots.append(RndBot(data, 7))
         bots.append(RndBot(data, 6))
         bots.append(RndBot(data, 10))
+        bots.append(RndBot(data, 2))
+        bots.append(RndBot(data, 3))
+        bots.append(RndBot(data, 4))
         for bot in bots:
             bot.calc()
         t_bots_e = time.time()

@@ -13,13 +13,10 @@ class Simulation:
     def __init__(self, data, send):
         self.camps=copy.deepcopy(data.camps)
         self.send=send # array of armies
-        self.rnd5=-999
-        self.rnd10=-999
-        self.rnd20=-999
-        self.rnd50=-999
+        self.rounds=[]
     
     def get(self):
-        return self.rnd5, self.rnd10, self.rnd20, self.rnd50
+        return self.rounds
 
     def simulate_rate(self):
         '''simulate growth rate'''
@@ -44,42 +41,17 @@ class Simulation:
                     self.camps[dst][C_CNT]= -1*self.camps[dst][C_CNT]
 
     def run(self):
-        ''' run the simulation ''' 
-        for round in range(5):
-            self.simulate_rate()
-            self.simulate_my_send()
-        # calculate the sum of my mancount
-        sum=0
-        for c in self.camps:
-            if c[C_OWNER]==1:
-                sum = sum + c[C_CNT]
-        self.rnd5=sum
-        for round in range(5):
-            self.simulate_rate()
-            self.simulate_my_send()
-        # calculate the sum of my mancount
-        sum=0
-        for c in self.camps:
-            if c[C_OWNER]==1:
-                sum = sum + c[C_CNT]
-        self.rnd10=sum
-        for round in range(10):
-            self.simulate_rate()
-            self.simulate_my_send()
-        # calculate the sum of my mancount
-        sum=0
-        for c in self.camps:
-            if c[C_OWNER]==1:
-                sum = sum + c[C_CNT]
-        self.rnd20=sum
-        for round in range(30):
-            self.simulate_rate()
-            self.simulate_my_send()
-        # calculate the sum of my mancount
-        sum=0
-        for c in self.camps:
-            if c[C_OWNER]==1:
-                sum = sum + c[C_CNT]
-        self.rnd50=sum
+        ''' run the simulation, every 5 round, 5x10= 50 rounds ''' 
+        for roundcnt in range(10):
+            for round in range(5):
+                self.simulate_rate()
+                self.simulate_my_send()
+            # calculate the sum of my mancount
+            sum=0
+            for c in self.camps:
+                if c[C_OWNER]==1:
+                    sum = sum + c[C_CNT]
+            self.rounds.append(sum)
+
                 
         
