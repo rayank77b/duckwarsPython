@@ -62,8 +62,8 @@ class Simulation:
 
     def run(self):
         ''' run the simulation, every 5 round, 5x10= 50 rounds ''' 
-        for roundcnt in range(5):
-            for round in range(5):
+        for roundcnt in range(10):
+            for round in range(3):
                 #_printC(self.camps[9], "vor")
                 self.simulate_rate()
                 #_printC(self.camps[10], "rate")
@@ -75,7 +75,7 @@ class Simulation:
             sum=0
             for c in self.camps:
                 if c[C_OWNER]==1:
-                    sum = sum + c[C_CNT]
+                    sum = sum + c[C_CNT]   # TODO: should we calculate armies too?
             self.rounds.append(sum)
 
                 

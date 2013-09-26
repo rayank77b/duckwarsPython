@@ -11,13 +11,13 @@ import time
 
 class AfrankBot2(IBot):
     def __init__(self):
-        self.debug=True
+        self.debug=False
         self.data=None
         if self.debug:
             self.log=open('/tmp/bot.log', 'a')
         else:
             self.log=None
-        self.round=0
+        self.round=-1
         
     def logme(self, msg):
         if self.debug:
@@ -26,35 +26,55 @@ class AfrankBot2(IBot):
 
     def doTurn(self, gamestate):
         self.round=self.round+1
+        self.logme("start round %d\n"%self.round)
         t1 = time.time()
         # first step, init data
         if self.data==None:
             self.data = Data(gamestate)
         self.data.parse(gamestate)
+        self.logme("data parsed\n")
         # reset the send array
         self.data.send=[]
         
         # set alle bots
         bots=[]
-        bots.append(NextBot(self.data))
+        bots.append(NextBot(self.data, 2))
+        bots.append(NextBot(self.data, 5))
+        bots.append(NextBot(self.data, 10))
+        bots.append(NextBot(self.data, 15))
+        bots.append(SendHalfToNext(self.data, 2))
+        bots.append(SendHalfToNext(self.data, 5))
+        bots.append(SendHalfToNext(self.data, 10))
+        bots.append(SendHalfToNext(self.data, 15))
+        bots.append(RndBot(self.data, 2))
+        bots.append(RndBot(self.data, 5))
+        bots.append(RndBot(self.data, 10))
+        bots.append(RndBot(self.data, 15))
+        self.logme("bots setted\n")
         #self.logme("botslen: %d\n"%(len(bots)))     
         for bot in bots:
+            #self.logme(bot.getName()+"\n")
             bot.calc()
         results=[]
         
-        #self.logme("sendlen: %d\n"%len(self.data.send))
+        
+        self.logme("sendlen: %d\n"%len(self.data.send))
         t1a = time.time()
         for s in self.data.send:
-            #print s
             sim = Simulation(self.data, s)
             sim.run()
             results.append(sim.get())
-        #print results
         t1b = time.time()
+        self.logme("simulat ok,  get best\n")
+        for r in results:
+            self.logme(str(r)+"\n")
         armies = self.data.getBest(results)
         
+        self.logme("-----------------------------------------------------------------------\n")
+        self.logme("best: "+str(armies)+"\n")
         t2=time.time()  ####################
         
+        self.logme("send armies to gamestate\n")
         for a in armies:
             gamestate.issueOrder(gamestate.getCamp(a[A_SRC]), gamestate.getCamp(a[A_DST]), a[A_CNT])
         t3=time.time()
