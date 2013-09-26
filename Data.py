@@ -38,6 +38,7 @@ class Data:
         campslen = gs.getNumCamps()
         self.send=[] # send store [army to send, result of simulation]
         
+        #print "Data campslen: ", campslen
         for id in range(campslen):
             c=[0,0,0,0,0,[],[]]
             camp=gs.getCamp(id)
@@ -87,6 +88,7 @@ class Data:
         trip = self.calculateDistance(srcid, dstid)
         a[A_TRIP]=trip
         a[A_REM]=trip
+        #print a
         return a
 
     def sendAll(self, armies):
@@ -95,7 +97,20 @@ class Data:
             a.append(x)
         self.send.append(a)
 
+    def getBest(self, results):
+        ret=[]
+        max=0
+        for x in results:
+            #print x[0]
+            if max<x[0] :
+                max=x[0]
+                ret=x[2]
+        return ret
+
     def __str__(self):
         camps=str(len(self.camps))+str(self.camps)
         send="len: "+str(len(self.send))+" data: "+str(self.send)
         return "camps: "+camps+"\nsend: "+send+"\n"
+
+
+

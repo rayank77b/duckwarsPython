@@ -53,14 +53,14 @@ class DataTest(unittest.TestCase):
         bots.append(RndBot(data, 5))
         bots.append(RndBot(data, 7))
         bots.append(RndBot(data, 6))
-        bots.append(RndBot(data, 10))
-        bots.append(RndBot(data, 2))
-        bots.append(RndBot(data, 3))
-        bots.append(RndBot(data, 4))
+        #bots.append(RndBot(data, 10))
+        #bots.append(RndBot(data, 2))
+        #bots.append(RndBot(data, 3))
+        #bots.append(RndBot(data, 4))
         for bot in bots:
             bot.calc()
         t_bots_e = time.time()
-        #print data
+        #print data.send
         print "bots diff: %d ms"%(int((t_bots_e - t_bots_s)*1000))
         
         x=0
@@ -73,7 +73,10 @@ class DataTest(unittest.TestCase):
             sim.run()
             results.append(sim.get())
         t_e = time.time()
-        print results
+        #for x in results:
+        #    print x
+        #print 
+        #print data.getBest(results)
         print "all diff:  %d ms"%(int((t_e - t_s)*1000))
 
 if __name__ == "__main__": 
