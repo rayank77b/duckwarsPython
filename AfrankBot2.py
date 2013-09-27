@@ -2,10 +2,10 @@ from DuckwarsApi import *
 from Data import *
 from SendHalfToNext import *
 from RndBot import *
-from Simulation import *
 from NextBot import *
 
 import time
+
 
 
 
@@ -69,6 +69,8 @@ class AfrankBot2(IBot):
         for r in results:
             self.logme(str(r)+"\n")
         armies = self.data.getBest(results)
+        
+
         
         self.logme("-----------------------------------------------------------------------\n")
         self.logme("best: "+str(armies)+"\n")

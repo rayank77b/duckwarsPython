@@ -2,11 +2,6 @@ import CalcArmy
 from Data import *
 
 class SendHalfToNext(CalcArmy.CalcArmy):
-    def __init__(self, data, max):
-        self.data=data
-        self.camps=data.camps
-        self.max = max
-    
     def calc(self):
         campslen=len(self.camps)
         armies=[]
@@ -24,8 +19,7 @@ class SendHalfToNext(CalcArmy.CalcArmy):
                     else:
                         dst=i+1
                     #print "i: ", i, "  src: ", src, "  dst: ", dst, "  cnt: ",cnt
-                    a=self.data.sendArmy(src, dst, cnt)
-                    armies.append(a)
-        self.data.sendAll(armies)
+                    self.sendArmy(src, dst, cnt)
+    
     def getName(self):
         return "SendHalfToNext"

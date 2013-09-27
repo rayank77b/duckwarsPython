@@ -4,11 +4,7 @@ import CalcArmy
 from Data import *
 
 class NextBot(CalcArmy.CalcArmy):
-    def __init__(self, data, max):
-        self.data=data
-        self.camps=data.camps
-        self.max = max
-    
+
     def nextmy(self, id):
         dst=self.camps[id][C_DIST]
         #print dst
@@ -35,9 +31,7 @@ class NextBot(CalcArmy.CalcArmy):
                     dst=self.nextmy(src)
                     #print "  src: ", src, " dst: ", dst
                     if dst>-1 :
-                        a=self.data.sendArmy(src, dst, cnt)
-                        armies.append(a)
-        self.data.sendAll(armies)
+                        self.sendArmy(src, dst, cnt)
 
     def getName(self):
         return "Next Bot "

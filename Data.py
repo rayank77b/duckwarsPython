@@ -44,7 +44,7 @@ class Data:
             camp=gs.getCamp(id)
             c[C_X]=camp.getX()
             c[C_Y]=camp.getY()
-            c[C_OWNER]=camp.getOwner()
+            c[C_OWNER]=camp.getOwner()  
             c[C_CNT]=camp.getMancount()
             c[C_SIZE]=camp.getSize()
             self.camps.append(c)
@@ -74,28 +74,6 @@ class Data:
             a[A_TRIP]=army.getTripDuration()
             a[A_REM]=army.getTurnsRemaining()
             self.camps[a[A_DST]][C_ARMY].append(a)
-
-    def calculateDistance(self, srcid, dstid):
-        ''' real destanation length '''
-        diff = self.camps[srcid][C_DIST][dstid]
-        return int(math.ceil(math.sqrt(diff)))
-
-    def sendArmy(self, srcid, dstid, cnt):
-        a=[0,0,0,0,0,0]
-        a[A_OWNER]=1
-        a[A_CNT]=cnt
-        a[A_SRC]=srcid; a[A_DST]=dstid
-        trip = self.calculateDistance(srcid, dstid)
-        a[A_TRIP]=trip
-        a[A_REM]=trip
-        #print a
-        return a
-
-    def sendAll(self, armies):
-        a=[]
-        for x in armies:
-            a.append(x)
-        self.send.append(a)
 
     def getBest(self, results):
         ret=[]

@@ -1,33 +1,55 @@
 from Data import *
-
-def _army_on_dst(a):
-    if a[A_REM]>0:  # if 0 then handled,  what happen if we send army to myself?
-        a[A_REM]=a[A_REM]-1
-        if a[A_REM]==0:  # army is on dest
-            return True
-    return False
-
-def _printC(cs, msg):
-    for c in cs:
-        print msg, " c ", c[C_X],":",c[C_Y]," ",c[C_OWNER]," ",c[C_CNT]
-
+import copy
 
 class CalcArmy(object):
     def __init__(self, data, max):
+        # get it own copy of the camps(armies, dists) array
         self.camps=copy.deepcopy(data.camps)
-        self.send=send # array of armies
+        self.max=max
+        self.send=[]
         self.rounds=[]
-        
+    
+    # calc() getName() should be implemented by bots 
     def calc(self):
         raise NotImplementedError( "Should have implemented this" )
     def getName(self):
         raise NotImplementedError( "Should have implemented this" )
 
-    
-    def get(self):
-        return sum(self.rounds), self.rounds, self.send
+    # TODO: army which is yet incoming should be deleted from array
+    def _army_on_dst(self, a):
+        ''' return true if the army is on it destination'''
+        if a[A_REM]>0:  # if 0 then handled,  what happen if we send army to myself?
+            a[A_REM]=a[A_REM]-1
+            if a[A_REM]==0:  # army is on dest
+                return True
+        return False
 
-    def simulate_rate(self):
+    def _printC(self, msg):
+        ''' for debuging output '''
+        for c in self.camps:
+            print msg, " c ", c[C_X],":",c[C_Y]," ",c[C_OWNER]," ",c[C_CNT]
+
+    def calculateDistance(self, srcid, dstid):
+        ''' real destanation length '''
+        diff = self.camps[srcid][C_DIST][dstid]
+        return int(math.ceil(math.sqrt(diff)))
+
+    def sendArmy(self, srcid, dstid, cnt):
+        ''' set an army to send in send array'''
+        a=[0,0,0,0,0,0]
+        a[A_OWNER]=1
+        a[A_CNT]=cnt
+        a[A_SRC]=srcid; a[A_DST]=dstid
+        trip = self.calculateDistance(srcid, dstid)
+        a[A_TRIP]=trip
+        a[A_REM]=trip
+        #print a
+        self.send.append(a)
+
+    def get(self):
+        return sum(self.rounds), self.rounds, self.send, self.getName()
+
+    def _simulate_rate(self):
         '''simulate growth rate'''
         for i, c in enumerate(self.camps):
             if c[C_OWNER]>0:
@@ -38,12 +60,12 @@ class CalcArmy(object):
                     self.camps[i][C_CNT]=c[C_CNT]+1+c[C_CNT]/20
                 #print "count: ", cnt
 
-    def simulate_my_send(self):
+    def _simulate_my_send(self):
         '''simulate sended armies from me'''
         #print "+"*80
         #print self.send
         for a in self.send:
-            if _army_on_dst(a):
+            if self._army_on_dst(a):
                 #print a
                 dst=a[A_DST]
                 if a[A_OWNER]==self.camps[dst][C_OWNER]:
@@ -60,12 +82,12 @@ class CalcArmy(object):
                     self.camps[dst][C_CNT]= -1*self.camps[dst][C_CNT]
                     #print "  camps changed", self.camps[dst][0:5]
 
-    def simulate_armies(self):
+    def _simulate_armies(self):
         '''simulate the incoming armies'''
         #print "-"*80
         for i, c in enumerate(self.camps):
             for j, a in enumerate(c[C_ARMY]):
-                if _army_on_dst(a):
+                if self._army_on_dst(a):
                     dst=a[A_DST]
                     if a[A_OWNER]==self.camps[dst][C_OWNER]:
                         #print "own army on camp", a, self.camps[dst][0:5],
@@ -86,11 +108,11 @@ class CalcArmy(object):
         for roundcnt in range(10):
             for round in range(3):
                 #_printC(self.camps, "vor1")
-                self.simulate_rate()
+                self._simulate_rate()
                 #_printC(self.camps, "rate")
-                self.simulate_my_send()
+                self._simulate_my_send()
                 #_printC(self.camps, "arm1")
-                self.simulate_armies()
+                self._simulate_armies()
                 #_printC(self.camps, "arm2")
             # calculate the sum of my mancount
             sum=0

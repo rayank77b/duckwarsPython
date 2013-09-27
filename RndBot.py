@@ -4,11 +4,7 @@ import CalcArmy
 from Data import *
 
 class RndBot(CalcArmy.CalcArmy):
-    def __init__(self, data, max):
-        self.data=data
-        self.camps=data.camps
-        self.max=max
-    
+
     def calc(self):
         campslen=len(self.camps)
         armies=[]
@@ -21,9 +17,7 @@ class RndBot(CalcArmy.CalcArmy):
                     if(dst==src):
                         pass
                     cnt=cnt-self.max
-                    a=self.data.sendArmy(src, dst, self.max)
-                    armies.append(a)
-        self.data.sendAll(armies)
+                    self.sendArmy(src, dst, self.max)
 
     def getName(self):
         return "Rnd Bot %d"%self.max
