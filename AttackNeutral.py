@@ -8,4 +8,4 @@ class AttackNeutral(CalcArmy.CalcArmy):
         pass
 
     def getName(self):
-        return "Attack Neutral Bot "
+        return "Attack Neutral Bot %d"%self.max

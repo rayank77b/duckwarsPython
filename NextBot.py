@@ -34,4 +34,4 @@ class NextBot(CalcArmy.CalcArmy):
                         self.sendArmy(src, dst, cnt)
 
     def getName(self):
-        return "Next Bot "
+        return "Next Bot %d"%self.max

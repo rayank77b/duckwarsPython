@@ -8,4 +8,4 @@ class DoNothing(CalcArmy.CalcArmy):
         pass
         
     def getName(self):
-        return "Do Nothing Bot "
+        return "Do Nothing Bot %d"%self.max

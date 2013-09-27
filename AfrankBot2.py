@@ -3,6 +3,8 @@ from Data import *
 from SendToNext import *
 from RndBot import *
 from NextBot import *
+from DoNothing import *
+from AttackNeutral import *
 
 import time
 
@@ -35,18 +37,11 @@ class AfrankBot2(IBot):
         
         # set alle bots
         bots=[]
-        bots.append(NextBot(self.data, 2))
-        #bots.append(NextBot(self.data, 5))
-        #bots.append(NextBot(self.data, 10))
-        bots.append(NextBot(self.data, 15))
-        bots.append(SendToNext(self.data, 2))
-        #bots.append(SendToNext(self.data, 5))
-        #bots.append(SendToNext(self.data, 10))
-        bots.append(SendToNext(self.data, 15))
-        bots.append(RndBot(self.data, 2))
-        #bots.append(RndBot(self.data, 5))
-        #bots.append(RndBot(self.data, 10))
-        bots.append(RndBot(self.data, 15))
+        bots.append(DoNothing(self.data, 0))
+        for x in [10,15,20,30, 50]:
+            bots.append(NextBot(self.data, x))
+            bots.append(SendToNext(self.data, x))
+            bots.append(RndBot(self.data, x))
         self.logme("bots setted\n")
         #self.logme("botslen: %d\n"%(len(bots)))     
         for bot in bots:

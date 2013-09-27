@@ -10,7 +10,7 @@ class CalcArmy(object):
         self.send=[]
         self.rounds=[]
         self.perRound=2
-        self.roundPeriod=5
+        self.roundPeriod=10
     
     # calc() getName() should be implemented by bots 
     def calc(self):
