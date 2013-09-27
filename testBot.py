@@ -10,7 +10,7 @@ import unittest
 
 from DuckwarsApi import *
 from Data import *
-from SendHalfToNext import *
+from SendToNext import *
 from RndBot import *
 from NextBot import *
 
@@ -48,7 +48,7 @@ class DataTest(unittest.TestCase):
         bots=[]
         t_bots_s = time.time()
         #bots.append(NextBot(data, 5))
-        bots.append(SendHalfToNext(data, 5))
+        bots.append(SendToNext(data, 5))
         bots.append(RndBot(data, 5))
         bots.append(RndBot(data, 7))
         #bots.append(RndBot(data, 6))

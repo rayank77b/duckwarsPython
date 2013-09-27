@@ -1,17 +1,14 @@
 from DuckwarsApi import *
 from Data import *
-from SendHalfToNext import *
+from SendToNext import *
 from RndBot import *
 from NextBot import *
 
 import time
 
-
-
-
 class AfrankBot2(IBot):
     def __init__(self):
-        self.debug=False
+        self.debug=True
         self.data=None
         if self.debug:
             self.log=open('/tmp/bot.log', 'a')
@@ -39,16 +36,16 @@ class AfrankBot2(IBot):
         # set alle bots
         bots=[]
         bots.append(NextBot(self.data, 2))
-        bots.append(NextBot(self.data, 5))
-        bots.append(NextBot(self.data, 10))
+        #bots.append(NextBot(self.data, 5))
+        #bots.append(NextBot(self.data, 10))
         bots.append(NextBot(self.data, 15))
-        bots.append(SendHalfToNext(self.data, 2))
-        bots.append(SendHalfToNext(self.data, 5))
-        bots.append(SendHalfToNext(self.data, 10))
-        bots.append(SendHalfToNext(self.data, 15))
+        bots.append(SendToNext(self.data, 2))
+        #bots.append(SendToNext(self.data, 5))
+        #bots.append(SendToNext(self.data, 10))
+        bots.append(SendToNext(self.data, 15))
         bots.append(RndBot(self.data, 2))
-        bots.append(RndBot(self.data, 5))
-        bots.append(RndBot(self.data, 10))
+        #bots.append(RndBot(self.data, 5))
+        #bots.append(RndBot(self.data, 10))
         bots.append(RndBot(self.data, 15))
         self.logme("bots setted\n")
         #self.logme("botslen: %d\n"%(len(bots)))     
@@ -56,22 +53,19 @@ class AfrankBot2(IBot):
             #self.logme(bot.getName()+"\n")
             bot.calc()
         results=[]
-        
-        
+
         self.logme("sendlen: %d\n"%len(self.data.send))
         t1a = time.time()
-        for s in self.data.send:
-            sim = Simulation(self.data, s)
-            sim.run()
-            results.append(sim.get())
+        for bot in bots:
+            #print s
+            bot.run()
+            results.append(bot.get())
         t1b = time.time()
         self.logme("simulat ok,  get best\n")
         for r in results:
             self.logme(str(r)+"\n")
         armies = self.data.getBest(results)
-        
 
-        
         self.logme("-----------------------------------------------------------------------\n")
         self.logme("best: "+str(armies)+"\n")
         t2=time.time()  ####################

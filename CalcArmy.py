@@ -1,5 +1,6 @@
 from Data import *
 import copy
+import math
 
 class CalcArmy(object):
     def __init__(self, data, max):
@@ -8,6 +9,8 @@ class CalcArmy(object):
         self.max=max
         self.send=[]
         self.rounds=[]
+        self.perRound=2
+        self.roundPeriod=5
     
     # calc() getName() should be implemented by bots 
     def calc(self):
@@ -105,8 +108,8 @@ class CalcArmy(object):
 
     def run(self):
         ''' run the simulation, every 5 round, 5x10= 50 rounds ''' 
-        for roundcnt in range(10):
-            for round in range(3):
+        for roundcnt in range(self.roundPeriod):
+            for round in range(self.perRound):
                 #_printC(self.camps, "vor1")
                 self._simulate_rate()
                 #_printC(self.camps, "rate")
