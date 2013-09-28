@@ -9,7 +9,7 @@ class CalcArmy(object):
         self.max=max
         self.send=[]
         self.rounds=[]
-        self.perRound=2
+        self.perRound=1
         self.roundPeriod=10
     
     # calc() getName() should be implemented by bots 
@@ -30,7 +30,8 @@ class CalcArmy(object):
     def _printC(self, msg):
         ''' for debuging output '''
         for c in self.camps:
-            print msg, " c ", c[C_X],":",c[C_Y]," ",c[C_OWNER]," ",c[C_CNT]
+            print msg, " c ", c[C_X],":",c[C_Y]," ",c[C_OWNER]," ",c[C_CNT], "  army: ", c[C_ARMY]
+        print "-"*80
 
     def calculateDistance(self, srcid, dstid):
         ''' real destanation length '''
@@ -46,8 +47,11 @@ class CalcArmy(object):
         trip = self.calculateDistance(srcid, dstid)
         a[A_TRIP]=trip
         a[A_REM]=trip
-        #print a
-        self.send.append(a)
+        self.camps[srcid][C_CNT] = self.camps[srcid][C_CNT] - cnt
+        if self.camps[srcid][C_CNT]>=0:
+            self.send.append(a) 
+        else:
+            self.camps[srcid][C_CNT] = self.camps[srcid][C_CNT] + cnt
 
     def get(self):
         return sum(self.rounds), self.rounds, self.send, self.getName()
@@ -107,20 +111,26 @@ class CalcArmy(object):
                         #print "  camps changed", self.camps[dst][0:5]
 
     def run(self):
-        ''' run the simulation, every 5 round, 5x10= 50 rounds ''' 
+        ''' run the simulation ''' 
+        weight=1.6
         for roundcnt in range(self.roundPeriod):
             for round in range(self.perRound):
-                #_printC(self.camps, "vor1")
+                #self._printC("vor1")
                 self._simulate_rate()
-                #_printC(self.camps, "rate")
+                #self._printC("rate")
                 self._simulate_my_send()
-                #_printC(self.camps, "arm1")
+                #self._printC("arm1")
                 self._simulate_armies()
-                #_printC(self.camps, "arm2")
+                #self._printC("arm2")
+                #print "+"*80
             # calculate the sum of my mancount
             sum=0
+            
             for c in self.camps:
                 if c[C_OWNER]==1:
                     sum = sum + c[C_CNT]   # TODO: should we calculate armies on the way too?
+            #print "###########   sum: ", sum, weight, int(sum*weight)
+            #print "+"*80
+            #self.rounds.append(int(sum*weight))
             self.rounds.append(sum)
-
+            weight=weight-0.1

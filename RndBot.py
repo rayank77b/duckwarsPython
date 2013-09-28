@@ -14,10 +14,9 @@ class RndBot(CalcArmy.CalcArmy):
                 src=i
                 while cnt>self.max:
                     dst=random.randint(0,campslen-1)
-                    if(dst==src):
-                        pass
-                    cnt=cnt-self.max
-                    self.sendArmy(src, dst, self.max)
+                    if(dst!=src):
+                        cnt=cnt-self.max
+                        self.sendArmy(src, dst, self.max)
 
     def getName(self):
         return "Rnd Bot %d"%self.max

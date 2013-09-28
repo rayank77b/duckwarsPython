@@ -38,7 +38,7 @@ class AfrankBot2(IBot):
         # set alle bots
         bots=[]
         bots.append(DoNothing(self.data, 0))
-        for x in [10,15,20,30, 50]:
+        for x in [2,5,10,15,20,30, 50]:
             bots.append(NextBot(self.data, x))
             bots.append(SendToNext(self.data, x))
             bots.append(RndBot(self.data, x))
