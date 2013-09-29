@@ -94,10 +94,11 @@ class CalcArmy(object):
         camps=data.camps
         for i, c in enumerate(camps):
             if c[C_OWNER]==1:
-                if not self._sended_army(i):
-                    dst=self.my_nearest(i)
-                    if (dst>0) and (dst!=i):
-                        self.sendArmy(i, dst, int(c[C_CNT]*0.8))
+                if c[C_CNT]>=c[C_SIZE]*20:
+                    if not self._sended_army(i):
+                        dst=self.my_nearest(i)
+                        if (dst>0) and (dst!=i):
+                            self.sendArmy(i, dst, int(c[C_CNT]*0.8))
 
     def _simulate_rate(self):
         '''simulate growth rate'''

@@ -63,7 +63,7 @@ class AfrankBot2(IBot):
             self.logme("bot was None !!!!!!!!!!!!")
             self.logme("##################################")
             bot=bots[0]
-        #bot.correction(self.data)
+        bot.correction(self.data)
         armies = bot.get()[2]
 
         self.logme("-----------------------------------------------------------------------\n")
