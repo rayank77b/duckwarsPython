@@ -10,7 +10,8 @@ class CalcArmy(object):
         self.send=[]
         self.rounds=[]
         self.perRound=1
-        self.roundPeriod=10
+        self.roundPeriod=20
+        self.sum=0
     
     # calc() getName() should be implemented by bots 
     def calc(self):
@@ -54,7 +55,49 @@ class CalcArmy(object):
             self.camps[srcid][C_CNT] = self.camps[srcid][C_CNT] + cnt
 
     def get(self):
-        return sum(self.rounds), self.rounds, self.send, self.getName()
+        return self.sum, self.rounds, self.send, self.getName()
+
+    def nearest2me(self, id):
+        dst=self.camps[id][C_DIST]
+        #print dst
+        dist=9999
+        d_id=-1
+        for i, d in enumerate(dst):
+            if self.camps[i][C_OWNER]!=1:
+                if d<=dist:
+                    dist=d
+                    d_id=i
+        return d_id
+
+    def my_nearest(self, id):
+        dst=self.camps[id][C_DIST]
+        #print dst
+        dist=9999
+        d_id=-1
+        for i, d in enumerate(dst):
+            if self.camps[i][C_OWNER]==1:
+                if d<=dist:
+                    dist=d
+                    d_id=i
+        return d_id
+
+    def _sended_army(self, cid):
+        ''' test if we have send some army from a camp with id cid'''
+        for army in self.send:
+            if cid==army[A_SRC]:
+                return True
+        return False
+    
+    def correction(self, data):
+        ''' correction look for full camps, which don't send armies and send
+            them to the next own camp '''
+        camps=data.camps
+        for i, c in enumerate(camps):
+            if c[C_OWNER]==1:
+                if not self._sended_army(i):
+                    dst=self.my_nearest(i)
+                    if (dst>0) and (dst!=i):
+                        self.sendArmy(i, dst, int(c[C_CNT]*0.8))
 
     def _simulate_rate(self):
         '''simulate growth rate'''
@@ -124,13 +167,17 @@ class CalcArmy(object):
                 #self._printC("arm2")
                 #print "+"*80
             # calculate the sum of my mancount
-            sum=0
+            sume=0
             
             for c in self.camps:
                 if c[C_OWNER]==1:
-                    sum = sum + c[C_CNT]   # TODO: should we calculate armies on the way too?
+                    cnt = c[C_CNT]
+                    # dont sum if the the count max
+                    if cnt<(c[C_SIZE]*20):
+                        sume = sume + c[C_CNT]   # TODO: should we calculate armies on the way too?
             #print "###########   sum: ", sum, weight, int(sum*weight)
             #print "+"*80
             #self.rounds.append(int(sum*weight))
-            self.rounds.append(sum)
+            self.rounds.append(sume)
             weight=weight-0.1
+        self.sum=sum(self.rounds)

@@ -21,7 +21,7 @@ def createGameState():
     
     msgC3="C 2 2 1 40 3\nC 5 2 0 40 3\nC 6 2 2 40 3\nC 4 6 0 40 3\nC 4 4 0 40 3\nC 8 6 2 40 3\n"
     msgA3 ="A 2 30 2 1 5 1\nA 1 60 0 2 2 1\nA 2 75 5 4 5 2\n"
-    message=msgC +msgA
+    message=msgC #+msgA
     gs = GameState(message)
     return gs
 
@@ -50,31 +50,34 @@ class DataTest(unittest.TestCase):
         print "pars diff: %d ms"%(int((t_parse_e - t_parse_s)*1000))
         bots=[]
         t_bots_s = time.time()
-        bots.append(NextBot(data, 10))
-        bots.append(SendToNext(data, 5))
-        bots.append(RndBot(data, 5))
-        bots.append(RndBot(data, 7))
-        bots.append(RndBot(data, 6))
-        bots.append(RndBot(data, 10))
-        bots.append(RndBot(data, 2))
-        bots.append(RndBot(data, 3))
-        bots.append(RndBot(data, 4))
+        bots.append(NextBot(data, 30))
+        #bots.append(SendToNext(data, 5))
+        #bots.append(RndBot(data, 5))
+        #ots.append(RndBot(data, 7))
+        bots.append(RndBot(data, 30))
         for bot in bots:
             bot.calc()
         t_bots_e = time.time()
         #print data.send
         print "bots diff: %d ms"%(int((t_bots_e - t_bots_s)*1000))
 
-        results=[]
         for bot in bots:
-            #print s
             bot.run()
-            results.append(bot.get())
         t_e = time.time()
-        for x in results:
-            print x
+        for bot in bots:
+            print bot.get()
         print "-"*80
-        print data.getBest(results)
+        bot = data.getBest(bots)
+        print bot.get()
+        bot.correction(data)
+        print "-"*80
+        for i, c in enumerate(data.camps):
+            if c[C_OWNER]==1:
+                print "id: ", i, "  ",c[0:5]
+        print "-"*80
+        for i, c in enumerate(bot.camps):
+            if c[C_OWNER]==1:
+                print "id: ", i, "  ",c[0:5]
         print "all diff:  %d ms"%(int((t_e - t_s)*1000))
 
 if __name__ == "__main__": 

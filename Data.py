@@ -75,14 +75,13 @@ class Data:
             a[A_REM]=army.getTurnsRemaining()
             self.camps[a[A_DST]][C_ARMY].append(a)
 
-    def getBest(self, results):
-        ret=[]
+    def getBest(self, bots):
+        ret=None
         max=0
-        for x in results:
-            #print x[0]
-            if max<x[0] :
-                max=x[0]
-                ret=x[2]
+        for bot in bots:
+            if max<bot.sum:
+                max=bot.sum
+                ret=bot
         return ret
 
     def __str__(self):

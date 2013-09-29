@@ -10,7 +10,7 @@ import time
 
 class AfrankBot2(IBot):
     def __init__(self):
-        self.debug=True
+        self.debug=False
         self.data=None
         if self.debug:
             self.log=open('/tmp/bot.log', 'a')
@@ -37,29 +37,34 @@ class AfrankBot2(IBot):
         
         # set alle bots
         bots=[]
-        bots.append(DoNothing(self.data, 0))
-        for x in [2,5,10,15,20,30, 50]:
+        #bots.append(DoNothing(self.data, 0))
+        for x in [9,19,29]: #2,5,10,15,20,30, 50]:
             bots.append(NextBot(self.data, x))
-            bots.append(SendToNext(self.data, x))
             bots.append(RndBot(self.data, x))
         self.logme("bots setted\n")
         #self.logme("botslen: %d\n"%(len(bots)))     
         for bot in bots:
             #self.logme(bot.getName()+"\n")
             bot.calc()
-        results=[]
 
         self.logme("sendlen: %d\n"%len(self.data.send))
         t1a = time.time()
         for bot in bots:
             #print s
             bot.run()
-            results.append(bot.get())
+            
         t1b = time.time()
         self.logme("simulat ok,  get best\n")
-        for r in results:
-            self.logme(str(r)+"\n")
-        armies = self.data.getBest(results)
+        for bot in bots:
+            self.logme(str(bot.get())+"\n")
+        bot = self.data.getBest(bots)
+        if bot==None:
+            self.logme("##################################")
+            self.logme("bot was None !!!!!!!!!!!!")
+            self.logme("##################################")
+            bot=bots[0]
+        #bot.correction(self.data)
+        armies = bot.get()[2]
 
         self.logme("-----------------------------------------------------------------------\n")
         self.logme("best: "+str(armies)+"\n")
@@ -72,7 +77,7 @@ class AfrankBot2(IBot):
         d1=(t2-t1)*1000
         d1b=(t1b-t1a)*1000
         d2=(t3-t2)*1000
-        self.logme("t %d: %d %d %d \n"%(self.round, int(d1), int(d1b), int(d2)))
+        self.logme("t %d: %d ms   %d ms   %d ms\n"%(self.round, int(d1), int(d1b), int(d2)))
         
     def getName(self):
         return "AfrankBot2"
