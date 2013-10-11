@@ -3,6 +3,8 @@ import copy
 import math
 
 class CalcArmy(object):
+    ''' CalcArmy is the init bot, it must be inheritat and expanded with
+        calc() and getName().'''
     def __init__(self, data, max):
         # get it own copy of the camps(armies, dists) array
         self.camps=copy.deepcopy(data.camps)
@@ -12,6 +14,8 @@ class CalcArmy(object):
         self.perRound=1
         self.roundPeriod=20
         self.sum=0
+        self.sum_my_army=0
+        self.sum_enemy=0
     
     # calc() getName() should be implemented by bots 
     def calc(self):
@@ -55,7 +59,8 @@ class CalcArmy(object):
             self.camps[srcid][C_CNT] = self.camps[srcid][C_CNT] + cnt
 
     def get(self):
-        return self.sum, self.rounds, self.send, self.getName()
+        return self.sum, self.sum_my_army, self.sum_enemy, self.rounds, self.send, self.getName()
+        #return self.sum, self.sum_my_army, self.sum_enemy, self.send, self.getName()
 
     def nearest2me(self, id):
         dst=self.camps[id][C_DIST]
@@ -64,6 +69,18 @@ class CalcArmy(object):
         d_id=-1
         for i, d in enumerate(dst):
             if self.camps[i][C_OWNER]!=1:
+                if d<=dist:
+                    dist=d
+                    d_id=i
+        return d_id
+    
+    def nearest2meneutral(self, id):
+        dst=self.camps[id][C_DIST]
+        #print dst
+        dist=9999
+        d_id=-1
+        for i, d in enumerate(dst):
+            if self.camps[i][C_OWNER]==0:
                 if d<=dist:
                     dist=d
                     d_id=i
@@ -99,6 +116,12 @@ class CalcArmy(object):
                         dst=self.my_nearest(i)
                         if (dst>0) and (dst!=i):
                             self.sendArmy(i, dst, int(c[C_CNT]*0.8))
+
+    def _getsum(self, r, i):
+        s=0
+        for x in r:
+            s=s+x[i]
+        return s
 
     def _simulate_rate(self):
         '''simulate growth rate'''
@@ -169,6 +192,8 @@ class CalcArmy(object):
                 #print "+"*80
             # calculate the sum of my mancount
             sume=0
+            sume_my_army=0
+            sum_enemy=0
             
             for c in self.camps:
                 if c[C_OWNER]==1:
@@ -176,9 +201,14 @@ class CalcArmy(object):
                     # dont sum if the the count max
                     if cnt<(c[C_SIZE]*20):
                         sume = sume + c[C_CNT]   # TODO: should we calculate armies on the way too?
+                elif c[C_OWNER]>1:
+                    cnt = c[C_CNT]
+                    sum_enemy = sum_enemy + c[C_CNT]   # TODO: should we calculate armies on the way too?
             #print "###########   sum: ", sum, weight, int(sum*weight)
             #print "+"*80
             #self.rounds.append(int(sum*weight))
-            self.rounds.append(sume)
+            self.rounds.append((sume,sume_my_army,sum_enemy))
             weight=weight-0.1
-        self.sum=sum(self.rounds)
+        self.sum=self._getsum(self.rounds, 0)
+        self.sum_my_army=self._getsum(self.rounds,1)
+        self.sum_enemy=self._getsum(self.rounds,2)

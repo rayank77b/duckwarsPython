@@ -22,4 +22,4 @@ class SendToNext(CalcArmy.CalcArmy):
                     self.sendArmy(src, dst, cnt)
     
     def getName(self):
-        return "Send To Next %d"%self.max
+        return "SendTNxt %d"%self.max

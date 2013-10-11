@@ -36,8 +36,7 @@ class Data:
         ''' create an array of camps, calculate all distances'''
         self.camps=[]
         campslen = gs.getNumCamps()
-        self.send=[] # send store [army to send, result of simulation]
-        
+
         #print "Data campslen: ", campslen
         for id in range(campslen):
             c=[0,0,0,0,0,[],[]]
@@ -86,8 +85,7 @@ class Data:
 
     def __str__(self):
         camps=str(len(self.camps))+str(self.camps)
-        send="len: "+str(len(self.send))+" data: "+str(self.send)
-        return "camps: "+camps+"\nsend: "+send+"\n"
+        return "camps: "+camps+"\n"
 
 
 

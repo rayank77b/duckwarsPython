@@ -19,4 +19,4 @@ class RndBot(CalcArmy.CalcArmy):
                         self.sendArmy(src, dst, self.max)
 
     def getName(self):
-        return "Rnd Bot %d"%self.max
+        return "Rand Bot %d"%self.max
