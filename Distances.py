@@ -34,10 +34,14 @@ class Distances():
     def getNextOtherCamp(self, gs, id):
         """ return the id of the neares camp, which not belong to me"""
         ocs = gs.getNotMyCamps()
+        return self.getNearestCamp(id, ocs)
+        
+    def getNearestCamp(self, id, camps):
+        """ return the id of the neares camp, which not belong to me"""
         c=None
         dis=9999999
         #print distances
-        for o in ocs:
+        for o in camps:
             d = self.get(id, o.getID())
             if d<dis :
                 dis=d

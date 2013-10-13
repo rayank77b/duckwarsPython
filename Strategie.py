@@ -23,6 +23,11 @@ class Strategie:
         for c in self.gs.getMyCamps():
             if c.getMancount()>(c.getMaxMancount()-2):
                 yield c
+
+    def getNextEnemy(self, c):
+        '''get the nearest enemy'''
+        enemies=self.gs.getHostileCamps()
+        return self.dist.getNearestCamp(c.getID(), enemies)
     
     def getNearestNeutralCamps(self, camp, radius=5):
         ''' generate all neutral camps about camp in radius r'''

@@ -5,10 +5,10 @@ class AttackEnemy(Strategie):
     
     def calculate(self):
         ret=False
-        for c in self.getMyFullCamps():
-            n = self.dist.getNextOtherCamp(self.gs, c.getID())
-            if(n!=None):
-                sendMen = c.getMancount()/2
-                self.gs.issueOrder(c, n, sendMen)
+        myCamps = self.gs.getMyCamps()
+        for c in myCamps:
+            e=self.getNextEnemy(c)
+            if(e!=None):
+                self.gs.issueOrder(c, e, c.getMancount())
                 ret=True
         return ret
