@@ -24,6 +24,13 @@ class Strategie:
             if c.getMancount()>(c.getMaxMancount()-2):
                 yield c
     
+    def getNearestNeutralCamps(self, camp, radius=5):
+        ''' generate all neutral camps about camp in radius r'''
+        for c in self.gs.getNeutralCamps():
+            if self.dist.get(camp.getID(),c.getID())<=(radius*radius):
+                yield c
+    
     def calculate(self):
-        '''calculate shold calculate where and how many should be sent'''
+        '''calculate shold calculate where and how many should be sent
+           should return true if send something or false if nothing sended.'''
         raise NotImplementedError("Please Implement this method")

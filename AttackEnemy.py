@@ -1,7 +1,7 @@
 
 from Strategie import *
 
-class SendNext(Strategie):
+class AttackEnemy(Strategie):
     
     def calculate(self):
         ret=False

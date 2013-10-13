@@ -4,6 +4,7 @@ import math
 import time
 from Distances import *
 from SendNext import *
+from FirstSend import *
 
 class AfrankBot1(IBot):
     def __init__(self):
@@ -27,6 +28,13 @@ class AfrankBot1(IBot):
             allcamps=gamestate.getCamps()
             self.dist = Distances(allcamps)
             self.firstTurn=False
+            b=FirstSend(gamestate, self.dist)
+            b.calculate()
+        
+        myC=gamestate.getMyCamps()[0]
+        if(myC.getSize()==1):
+            b=AttackEnemy(gamestate, self.dist)
+            b.calculate()
         
         bot=SendNext(gamestate, self.dist)
         bot.calculate()
