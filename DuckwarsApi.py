@@ -2,6 +2,14 @@ import sys
 import os
 import math
 
+__author__ = "Kevin Erath, Andrej Frank, etc"
+__copyright__ = "Copyright 2014, IT-Designers"
+__license__ = "GPL"
+__version__ = "2.0.0"
+__maintainer__ = "Andrej Frank"
+__email__ = "andrej.frank@stz-softwaretechnik.de"
+__status__ = "Beta"
+
 class Camp:
     """Repraesentiert ein Camp."""
 
@@ -127,7 +135,7 @@ class Army:
 class GameSettings:
     """Enthaelt die Einstellungen fuer das laufende Spiel."""
     
-    def GameSettings(self):
+    def __init__(self):
         self.MaxCampSize = 5;
         self.GrowthRate = [1, 2, 3, 4, 5]
         self.MaxManCount = [20, 40, 60, 80, 100]
@@ -139,6 +147,7 @@ class GameSettings:
 
     @staticmethod
     def fromDataString(dataString):
+        """ extract Data from Strings and generate a GameSettings object."""
         x=0
         data = dataString.split(" ")
         settings = GameSettings()

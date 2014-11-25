@@ -26,7 +26,18 @@ class ArmyTest(unittest.TestCase):
         self.failUnlessEqual(a.getTripDuration(),tripLength)
         self.failUnlessEqual(a.getTurnsRemaining(),remaining)
 
-
+class GameSettingsTest(unittest.TestCase):
+    def testGameSettingsKonstruktor(self):
+        gset = GameSettings()
+        self.failUnlessEqual(gset.MaxCampSize,5)
+        self.failUnlessEqual(gset.GrowthRate[4], 5)
+        self.failUnlessEqual(gset.MaxManCount[3], 80)
+        self.failUnlessEqual(gset.UpgradeCost[3],70)
+        self.failUnlessEqual(gset.TravelCost, 1)
+        self.failUnlessEqual(gset.TravelCostStartsWithTurn, 7)
+        self.failUnlessEqual(gset.OverfullCampDecreseRate, 1)
+        self.failUnlessEqual(gset.MaxGameLength,0)
+        
 
 if __name__ == "__main__": 
     unittest.main()
