@@ -37,7 +37,7 @@ class Camp:
 
     def setMancount(self, count):
         """Aendert die Mannstaerke des Camps."""
-        self.__mancount=count
+        self.__mancount = count
         
     def getMaxMancount(self):
         """Liefert die maximale Anzahl Maenner die dieses Camp aufnehmen kann. """
@@ -51,7 +51,7 @@ class Camp:
         """Liefert die Wachstumsrate um der die Anzahl Maenner pro Runde steigt. """
         if (self.__mancount < self.getMaxMancount()):
             x = self.__gameState.getSettings().MaxCampSize - 2
-            for x in range(x,0,-1):
+            for i in range(x,0,-1):
                 if (self.__mancount >= self.__gameState.getSettings().MaxManCount[i - 1]):
                     return self.__gameState.getSettings().GrowthRate[i]
             return self.__gameState.getSettings().GrowthRate[0]
@@ -159,15 +159,15 @@ class GameSettings:
         x=x+1
         settings.TravelCostStartsWithTurn = int(data[x])
         x=x+1
-        settings.MaxCampSize = int(data[x])
+        settings.MaxCampSize = int(data[x]) 
         x=x+1
-        for i in range(settings.MaxManCount.length):
+        for i in range(len(settings.MaxManCount)):    # 5x
             settings.MaxManCount[i] = int(data[x])
             x=x+1
-        for i in range(settings.GrowthRate.length):
+        for i in range(len(settings.GrowthRate)): # 5x
             settings.GrowthRate[i] = int(data[x])
             x=x+1
-        for i in range(settings.UpgradeCost.length):
+        for i in range(len(settings.UpgradeCost)):  # 4x
             settings.UpgradeCost[i] = int(data[x]);
             x=x+1
         return settings
@@ -342,7 +342,7 @@ class GameState:
                         owner = int(tokens[3])
                         mancount = int(tokens[4])
                         size = int(tokens[5])
-                        self.__camps.append(Camp(idCamp, owner, mancount, size, x, y))
+                        self.__camps.append(Camp(idCamp, owner, mancount, size, x, y, self))
                         idCamp=idCamp+1
                 elif( "A" in tokens[0] ):
                     if( len(tokens) == 7):
@@ -373,28 +373,28 @@ class Helper:
     def executeBot(bot):
         """Durch den Aufruf wird die Verarbeitungsschleife gestartet."""
         try:
-            teamnames=["", "", "", ""]  # 4 teamnames
+            teamnames = ["", "", "", ""]  # 4 teamnames
             line = ""
             message = ""
             settings = GameSettings()
-            line=sys.stdin.readline()
+            line = sys.stdin.readline()
             while(line):
                 if( "go" in line ):
                     gs = GameState(message, teamnames, settings)
                     bot.doTurn(gs)
                     gs.finishTurn()
-                    message=""
+                    message = ""
                 elif( "name?" in line ):
                     print bot.getName()
                     sys.stdout.flush()
                 elif( "TN" in line ):
                     teamname = line.split(":")[1].trim()
-                    id = int(line.substring(2, 3)) - 1;      ## FIXME
+                    id = int(line[2, 3]) - 1;      ## FIXME
                     teamnames[id] = teamname;
                 elif(line.startsWith("ENV")):
-                    settings = GameSettings.fromDataString(line.substring(4).trim());  ## FIXME
+                    settings = GameSettings.fromDataString(line.env[4:].strip());  ## FIXME
                 else:
-                    message=message+line+os.linesep
+                    message = message+line+os.linesep
                 line=sys.stdin.readline()
         except Exception as e:
             sys.stderr.write("shit happens : ")
