@@ -30,9 +30,21 @@ class DataTest(unittest.TestCase):
     def setUp(self):
         self.gs = createGameState()
         self.camps = createCamps(self.gs)
-    
-    def test_Data(self):
-        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
 if __name__ == "__main__": 
     unittest.main()

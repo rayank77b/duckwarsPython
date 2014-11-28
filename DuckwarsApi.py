@@ -369,20 +369,27 @@ class IBot:
         """Wird aufgerufen um den Namen des Bots abzufragen."""
         raise NotImplementedError("Please Implement this method")
 
-# TODO: FIXME
+def logme(mess):
+    f = open('/tmp/duckwarslogs.txt', 'a')
+    f.write(mess)
+    f.close()
+
 class Helper:
     """Hilfsklasse welche die Verarbeitungsschleife implementiert."""
     @staticmethod
     def executeBot(bot):
         """Durch den Aufruf wird die Verarbeitungsschleife gestartet."""
+        logme("---------------------------------------------------\n")
         try:
             teamnames = ["", "", "", ""]  # 4 teamnames
             line = ""
             message = ""
             settings = GameSettings()
             line = sys.stdin.readline()
+            logme(">line: "+line)
             while(line):
                 if( "go" in line ):
+                    #logme("<message: "+message)
                     gs = GameState(message, teamnames, settings)
                     bot.doTurn(gs)
                     gs.finishTurn()
@@ -391,11 +398,14 @@ class Helper:
                     print bot.getName()
                     sys.stdout.flush()
                 elif( "TN" in line ):
-                    teamname = line.split(":")[1].trim()
-                    id = int(line[2, 3]) - 1;      ## FIXME
+                    #logme(">TN: "+line)
+                    teamname = line.split(":")[1].strip()
+                    id = int(line[2]) - 1      ## FIXME
                     teamnames[id] = teamname;
-                elif(line.startsWith("ENV")):
-                    settings = GameSettings.fromDataString(line.env[4:].strip());  ## FIXME
+                elif("ENV" in line):
+                    #logme(">ENV: "+line)
+                    env = line[4:].strip()
+                    settings = GameSettings.fromDataString(env)
                 else:
                     message = message+line+os.linesep
                 line=sys.stdin.readline()

@@ -233,14 +233,5 @@ class GameStateTest(unittest.TestCase):
         gs.upgradeCamp(c0)
         print "------------------------"
 
-
-#class IBot:
-#    def doTurn(self, gamestate):
-#    def getName(self):
-#class Helper:
-#    def executeBot(bot):
-
-
-
 if __name__ == "__main__": 
     unittest.main()
