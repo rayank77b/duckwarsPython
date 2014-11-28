@@ -37,6 +37,9 @@ class Camp:
 
     def setMancount(self, count):
         """Aendert die Mannstaerke des Camps."""
+        maxcount = self.getMaxMancount()
+        if count > maxcount:
+            count = maxcount
         self.__mancount = count
         
     def getMaxMancount(self):
@@ -45,7 +48,7 @@ class Camp:
 
     def getMaxGrowthrate(self):
         """Liefert die maximale Wachstumsrate der die Anzahl Maenner pro Runde in diesem Camp steigen kann."""
-        return self.__gameState.getSettings().GrowthRate[size - 1]
+        return self.__gameState.getSettings().GrowthRate[self.__size - 1]
 
     def getGrowthrate(self):
         """Liefert die Wachstumsrate um der die Anzahl Maenner pro Runde steigt. """
@@ -67,7 +70,7 @@ class Camp:
 
     def getCanBeUpgraded(self):
         """Kann ein Camp aufgeruestet werden?"""
-        return (size < self.__gameState.getSettings().MaxCampSize) and (self.__mancount >= self.getUpgradeCost())
+        return (self.__size < self.__gameState.getSettings().MaxCampSize) and (self.__mancount >= self.getUpgradeCost())
 
     def getOwner(self):
         """Liefert die ID des Spielers dem dieses Camp gehoert. """

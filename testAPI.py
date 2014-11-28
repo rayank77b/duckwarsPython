@@ -50,6 +50,7 @@ class GameSettingsTest(unittest.TestCase):
         self.failUnlessEqual(gset.TravelCost, 1)
         self.failUnlessEqual(gset.TravelCostStartsWithTurn, 7)
 
+# helper for create a game state
 def createGameState():
     mC1 = "C 2 2 1 20 3\n"   # id 0
     mC2 = "C 10 10 2 20 2\n" # id 1
@@ -63,6 +64,8 @@ def createGameState():
     return state
 
 class GameStateFirstTest(unittest.TestCase):
+    """this is only, because we must first test if GameState is working, 
+        because class Camp use it"""
     def testFirstGameStateCreation(self):
         gs = createGameState()
         self.failUnlessEqual(gs.getTeamNames()[0],"A")
@@ -70,12 +73,12 @@ class GameStateFirstTest(unittest.TestCase):
         self.failUnlessEqual(gs.getNumCamps(), 4)
         self.failUnlessEqual(gs.getNumArmies(), 2)
 
-class CampTest(unittest.TestCase):        
+class CampTest(unittest.TestCase):    
     def testCamp(self):
         id=0
         campOwner=1
-        campMancount=33
-        campSize=5
+        campMancount=60
+        campSize=3
         posX=5
         posY=7
         gs = createGameState()
@@ -90,11 +93,18 @@ class CampTest(unittest.TestCase):
         self.failUnlessEqual(c.getMancount(),c.getMaxMancount())  # es sollte nicht mehr als max gesetzt werden!
         c.setMancount(oldvalue);
         self.failUnlessEqual(c.getMancount(),campMancount)
+        self.failUnlessEqual(4,(1+campMancount/20))
         
-        self.failUnlessEqual(2,(1+campMancount/20))
-        self.failUnlessEqual(c.getGrowthrate(),(1+campMancount/20))   # FIXME: mehr Test zu diese Funktion
+        self.failUnlessEqual(c.getGrowthrate(), 0) #(1+campMancount/20))   # FIXME: mehr Test zu diese Funktion
+        self.failUnlessEqual(c.getMaxGrowthrate(), 3)
+        self.failUnlessEqual(c.getCanBeUpgraded(), True) 
+        self.failUnlessEqual(c.getUpgradeCost(), 50) 
+        
         self.failUnlessEqual(c.getOwner(),campOwner)
+        
         self.failUnlessEqual(c.getSize(),campSize)
+        c.setSize(5)
+        self.failUnlessEqual(c.getSize(),campSize+2)
         self.failUnlessEqual(c.getX(),posX)
         self.failUnlessEqual(c.getY(),posY)
 
@@ -111,6 +121,125 @@ class GameStateTest(unittest.TestCase):
         self.failUnlessEqual(0,a.getSource())
         self.failUnlessEqual(10,a.getTripDuration())
         self.failUnlessEqual(5,a.getTurnsRemaining())
+        
+        a = gs.getMyArmies()
+        self.failUnlessEqual(len(a), 2)
+        
+        c0 = gs.getCamp(0)
+        c1 = gs.getCamp(1)
+        c2 = gs.getCamp(2)
+        c3 = gs.getCamp(3)
+        self.failUnlessEqual(2, c2.getID())
+        self.failUnlessEqual(10,c2.getMancount())
+        self.failUnlessEqual(60,c2.getMaxMancount())
+        self.failUnlessEqual((1+20/20),c1.getGrowthrate())  # fehlerhaft, die rate 
+        self.failUnlessEqual(0,c2.getOwner())
+        self.failUnlessEqual(3,c2.getSize())
+        self.failUnlessEqual(11, c2.getX())
+        self.failUnlessEqual(11,c2.getY())
+        
+
+        self.failUnlessEqual(gs.calculateTravelCost(c0, c1), 5);
+        self.failUnlessEqual(gs.calculateTravelCost(c0, c3), 0);
+        
+        cs = gs.getCamps()
+        self.failUnlessEqual(4, len(cs))
+        c2 = cs[2]
+        self.failUnlessEqual(2, c2.getID())
+        self.failUnlessEqual(10,c2.getMancount())
+        self.failUnlessEqual(60,c2.getMaxMancount())
+        self.failUnlessEqual(1,c2.getGrowthrate()) 
+        self.failUnlessEqual(0,c2.getOwner())
+        self.failUnlessEqual(3,c2.getSize())
+        self.failUnlessEqual(11, c2.getX())
+        self.failUnlessEqual(11,c2.getY())
+        
+        hostile = gs.getHostileCamps()
+        self.failUnlessEqual(2,len(hostile))
+        c2 = hostile[0]   #mC2 = "C 10 10 2 20 2\n" # id 1
+        self.failUnlessEqual(1, c2.getID())
+        self.failUnlessEqual(20,c2.getMancount())
+        self.failUnlessEqual(40,c2.getMaxMancount())
+        #print c2
+        self.failUnlessEqual((1+20/20),c2.getGrowthrate())
+        self.failUnlessEqual(2,c2.getOwner())
+        self.failUnlessEqual(2,c2.getSize())
+        self.failUnlessEqual(10, c2.getX())
+        self.failUnlessEqual(10,c2.getY())
+        
+        myCamps = gs.getMyCamps()
+        self.failUnlessEqual(1,len(myCamps))
+        c2 = myCamps[0]   #mC1 = "C 2 2 1 20 3\n"   # id 0
+        self.failUnlessEqual(0, c2.getID())
+        self.failUnlessEqual(20,c2.getMancount())
+        self.failUnlessEqual(60,c2.getMaxMancount())
+        self.failUnlessEqual((1+20/20),c2.getGrowthrate())
+        self.failUnlessEqual(1,c2.getOwner())
+        self.failUnlessEqual(3,c2.getSize())
+        self.failUnlessEqual(2, c2.getX())
+        self.failUnlessEqual(2,c2.getY())
+        
+        neutralCamps = gs.getNeutralCamps()
+        self.failUnlessEqual(1,len(neutralCamps))
+        c2 = neutralCamps[0]   #mC3 = "C 11 11 0 10 3\n" # id 2
+        self.failUnlessEqual(2, c2.getID())
+        self.failUnlessEqual(10,c2.getMancount())
+        self.failUnlessEqual(60,c2.getMaxMancount())
+        self.failUnlessEqual(1,c2.getGrowthrate())
+        self.failUnlessEqual(0,c2.getOwner())
+        self.failUnlessEqual(3,c2.getSize())
+        self.failUnlessEqual(11, c2.getX())
+        self.failUnlessEqual(11,c2.getY())
+        
+        notMyCamps = gs.getNotMyCamps()
+        self.failUnlessEqual(3,len(notMyCamps))
+        c2 = notMyCamps[0]  
+        self.failUnlessEqual(1, c2.getID())
+        self.failUnlessEqual(20,c2.getMancount())
+        self.failUnlessEqual(40,c2.getMaxMancount())
+        self.failUnlessEqual((1+20/20),c2.getGrowthrate())
+        self.failUnlessEqual(2,c2.getOwner())
+        self.failUnlessEqual(2,c2.getSize())
+        self.failUnlessEqual(10, c2.getX())
+        self.failUnlessEqual(10,c2.getY())
+        
+        production = gs.getProduction(2)
+        self.failUnlessEqual(production,4)
+        
+        total = gs.getTotalMancount(2)
+        self.failUnlessEqual(total,40)
+        total = gs.getTotalMancount(1)
+        self.failUnlessEqual(total,40)
+        
+        self.failUnlessEqual(True, gs.isAlive(1))
+        self.failUnlessEqual(False, gs.isAlive(4))
+        
+        c2 = gs.getCamp(2)
+        distance = gs.calculateDistance(c0, c1)
+        self.failUnlessEqual(12,distance)
+        distance = gs.calculateDistance(c0, c2)
+        self.failUnlessEqual(13,distance)
+        distance = gs.calculateDistance(c0, c3)
+        self.failUnlessEqual(5,distance)
+        
+        src = gs.getCamp(0)
+        dst = gs.getCamp(2)
+        gs.issueOrder(src,dst, 2)
+        self.failUnlessEqual(gs.getNumArmies(), 3)
+        c0 = gs.getCamp(0)
+        self.failUnlessEqual(18, c0.getMancount())
+        
+        print "--- Test upgradeCamp ---"
+        gs.upgradeCamp(c0)
+        print "------------------------"
+
+
+#class IBot:
+#    def doTurn(self, gamestate):
+#    def getName(self):
+#class Helper:
+#    def executeBot(bot):
+
 
 
 if __name__ == "__main__": 
