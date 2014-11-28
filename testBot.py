@@ -18,7 +18,8 @@ def createGameState():
     msgC3="C 2 2 1 40 3\nC 5 2 0 40 3\nC 6 2 2 40 3\nC 4 6 0 40 3\nC 4 4 0 40 3\nC 8 6 2 40 3\n"
     msgA3 ="A 2 30 2 1 5 1\nA 1 60 0 2 2 1\nA 2 75 5 4 5 2\n"
     message=msgC #+msgA
-    gs = GameState(message)
+    settings = GameSettings()
+    gs = GameState(message, ["A","B","C","D"],settings)
     return gs
 
 def createCamps(gs):
