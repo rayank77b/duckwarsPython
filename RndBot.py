@@ -1,22 +1,23 @@
 import random
 
-import CalcArmy
-from Data import *
+from DuckwarsApi import *
 
-class RndBot(CalcArmy.CalcArmy):
-
-    def calc(self):
-        campslen=len(self.camps)
-        armies=[]
-        for i, c in enumerate(self.camps):
-            if c[C_OWNER]==1:
-                cnt = c[C_CNT]
-                src=i
-                while cnt>self.max:
-                    dst=random.randint(0,campslen-1)
-                    if(dst!=src):
-                        cnt=cnt-self.max
-                        self.sendArmy(src, dst, self.max)
+class RndBot(IBot):
+    def doTurn(self, gamestate):
+        myCamps = gamestate.getMyCamps()
+        maxCampCount = len(gamestate.getCamps())-1
+        for src, myC in enumerate(myCamps):
+            dst = random.randint(0,maxCampCount)
+            if dst!=src:
+                cnt = random.randint(1, myC.getMancount())
+                hostile = gamestate.getCamp(dst)
+                gamestate.issueOrder(myC, hostile, cnt)       
 
     def getName(self):
-        return "Rand Bot %d"%self.max
+        return "RandBot|Python"
+
+
+if __name__ == "__main__":
+    myBot = RndBot()
+    Helper.executeBot(myBot)
+
