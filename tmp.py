@@ -1,19 +1,7 @@
-from DuckwarsApi import *
-
-import math
-import time
-
-__author__ = "Andrej Frank"
-__copyright__ = "Copyright 2014, IT-Designers"
-__license__ = "GPL"
-__version__ = "3.0.0"
-__maintainer__ = "Andrej Frank"
-__email__ = "andrej.frank@stz-softwaretechnik.de"
-__status__ = "Beta"
-
 class Distances():
     def __init__(self, camps):
-        """ calculate for all camps an array [][], ditances.
+        """ Constructor
+            calculate for all camps an array [][], ditances.
             the matrix has then the distances beetwen the camps"""
         self.camps_size=len(camps)
         self.distances= [[9999999 for col in range(self.camps_size)] for row in range(self.camps_size)]
@@ -56,21 +44,54 @@ class Distances():
                 c=o
         return c
 
-class AfrankBot1(IBot):
-    def __init__(self):
-        self.firstTurn=True
-        self.distances=None
-    
-    def doTurn(self, gamestate):
-        gs = gamestate
-        camps = gs.getCamps()
-        mycamps = gs.getMyCamps()
-        
-    
-    def getName(self):
-        return "AfrankBot|PythonTeam"
+
+def sendHalfMenIfFull(gs, fromCamp, toCamp):
+    if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
+        sendMen = fromCamp.getMancount()/2
+        gs.issueOrder(fromCamp, toCamp, sendMen)
 
 
-if __name__ == "__main__":
-    myBot = AfrankBot1()
-    Helper.executeBot(myBot)
+
+if(self.firstTurn):
+            # berechne alles, was statisch ist, bzw welche map, welche strategie
+            allcamps=gamestate.getCamps()
+            self.dist = Distances(allcamps)
+            self.firstTurn=False
+        else:
+            #t1 = time.time()
+            myCamps = gamestate.getMyCamps()
+            allCamps = gamestate.getCamps()
+            notMyCamps = gamestate.getNotMyCamps()
+            for c in myCamps:
+                n = self.dist.getNextOtherCamp(gamestate, c.getID())
+                if(n!=None):
+                    sendHalfMenIfFull(gamestate, c, n)
+                #else:
+                #    n = getNearestCamp(c, myCamps)
+                #    if(n!=None):
+                #        sendHalfMenIfFull(gamestate, c, n)
+            #t2 = time.time()
+            #d = (t2-t1)*1000000
+            #print "doTurn() %d us"%d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
