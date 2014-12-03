@@ -12,6 +12,8 @@ __email__ = "andrej.frank@stz-softwaretechnik.de"
 __status__ = "Beta"
 
 class Distances():
+    """ build a matrix of all distances between all camps, 
+        must be do one time in begin of game (first round)"""
     def __init__(self, camps):
         """ calculate for all camps an array [][], ditances.
             the matrix has then the distances beetwen the camps"""
@@ -34,17 +36,17 @@ class Distances():
     def get(self, myid, campid):
         return self.distances[myid][campid]
 
-    def getMin(self, id):
-        """ return the distance of two camps"""
+    def getClosest(self, id):
+        """ return the closest camp to camp with id. """
         return min(self.distances[id])
     
-    def getNearestId(self, id):
+    def getClosestId(self, id):
         """return the id of the nearest capmp with id"""
         m = min(self.distances[id])
         return self.distances[id].index(m)
 
-    def getNextOtherCamp(self, gs, id):
-        """ return the id of the neares camp, which not belong to me"""
+    def getClosestOtherCamp(self, gs, id):
+        """ return the id of the closest camp, which not belong to me"""
         ocs = gs.getNotMyCamps()
         c=None
         dis=9999999
@@ -56,17 +58,45 @@ class Distances():
                 c=o
         return c
 
+def sendMenIfFull(gs, fromCamp, toCamp):
+    if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
+        sendMen = (fromCamp.getMancount()*4)/5
+        gs.issueOrder(fromCamp, toCamp, sendMen)
+
 class AfrankBot1(IBot):
     def __init__(self):
         self.firstTurn=True
         self.distances=None
+        self.f = open("/tmp/afrankbotlog.txt", 'a')
     
     def doTurn(self, gamestate):
-        gs = gamestate
-        camps = gs.getCamps()
-        mycamps = gs.getMyCamps()
+        if(self.firstTurn):
+        # berechne alles, was statisch ist, bzw welche map, welche strategie
+            #start = time.time()
+            allcamps=gamestate.getCamps()
+            self.dist = Distances(allcamps)
+            self.firstTurn=False
+            self.start(gamestate)
+            #end = time.time()
+            #self.logme("start first turn: time: %d"%(end-start))
+        else:
+            self.start(gamestate)
+
+
+    def start(self, gamestate):
+        """ the main game routine """
+        camps = gamestate.getCamps()
+        mycamps = gamestate.getMyCamps()
+        for c in mycamps:
+            n = self.dist.getClosestOtherCamp(gamestate, c.getID())
+            if(n!=None):
+                    sendMenIfFull(gamestate, c, n)
+
+
+    def logme(self, message):
+        self.f.write(message+"\n")
+        self.f.flush()
         
-    
     def getName(self):
         return "AfrankBot|PythonTeam"
 
