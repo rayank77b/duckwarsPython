@@ -369,24 +369,24 @@ class IBot:
         """Wird aufgerufen um den Namen des Bots abzufragen."""
         raise NotImplementedError("Please Implement this method")
 
-def logme(mess):
-    f = open('/tmp/duckwarslogs.txt', 'a')
-    f.write(mess)
-    f.close()
+#def logme(mess):
+#    f = open('/tmp/duckwarslogs.txt', 'a')
+#    f.write(mess)
+#    f.close()
 
 class Helper:
     """Hilfsklasse welche die Verarbeitungsschleife implementiert."""
     @staticmethod
     def executeBot(bot):
         """Durch den Aufruf wird die Verarbeitungsschleife gestartet."""
-        logme("---------------------------------------------------\n")
+        #logme("---------------------------------------------------\n")
         try:
             teamnames = ["", "", "", ""]  # 4 teamnames
             line = ""
             message = ""
             settings = GameSettings()
             line = sys.stdin.readline()
-            logme(">line: "+line)
+            #logme(">line: "+line)
             while(line):
                 if( "go" in line ):
                     #logme("<message: "+message)
@@ -400,7 +400,7 @@ class Helper:
                 elif( "TN" in line ):
                     #logme(">TN: "+line)
                     teamname = line.split(":")[1].strip()
-                    id = int(line[2]) - 1      ## FIXME
+                    id = int(line[2]) - 1     
                     teamnames[id] = teamname;
                 elif("ENV" in line):
                     #logme(">ENV: "+line)

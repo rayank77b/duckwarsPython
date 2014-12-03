@@ -6,7 +6,7 @@ import time
 __author__ = "Andrej Frank"
 __copyright__ = "Copyright 2014, IT-Designers"
 __license__ = "GPL"
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 __maintainer__ = "Andrej Frank"
 __email__ = "andrej.frank@stz-softwaretechnik.de"
 __status__ = "Beta"
@@ -67,7 +67,7 @@ class AfrankBot1(IBot):
     def __init__(self):
         self.firstTurn=True
         self.distances=None
-        self.f = open("/tmp/afrankbotlog.txt", 'a')
+        #self.f = open("/tmp/afrankbotlog.txt", 'a')
     
     def doTurn(self, gamestate):
         if(self.firstTurn):
@@ -93,12 +93,12 @@ class AfrankBot1(IBot):
                     sendMenIfFull(gamestate, c, n)
 
 
-    def logme(self, message):
-        self.f.write(message+"\n")
-        self.f.flush()
+#    def logme(self, message):
+#        self.f.write(message+"\n")
+#        self.f.flush()
         
     def getName(self):
-        return "AfrankBot|PythonTeam"
+        return "AfrankBotV01|PythonTeam"
 
 
 if __name__ == "__main__":
