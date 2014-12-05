@@ -86,13 +86,19 @@ class AfrankBot1(IBot):
 
     def sendMen(self, fromCamp, toCamp):
         mc = fromCamp.getMancount()
-        cost = self.gamestate.calculateTravelCost(fromCamp, toCamp)
-        self.logme("cost: %d"%cost)
+        travel_cost = self.gamestate.calculateTravelCost(fromCamp, toCamp)
+        upgrade_cost = fromCamp.getUpgradeCost()
+        #self.logme("travelcost: %d\nupgradecost: %d\n"%(travel_cost, upgrade_cost))
+        
         if( mc > (fromCamp.getMaxMancount()-2)):   # falls voll sende 4/5 
             send = (mc*4)/5
             self.gamestate.issueOrder(fromCamp, toCamp, send)
-        elif(toCamp.getMancount()< (mc-cost-2)):
+        elif((toCamp.getMancount()+travel_cost)< (mc-2)):
             self.gamestate.issueOrder(fromCamp, toCamp, (mc-2))
+       # elif( fromCamp.getCanBeUpgraded()):
+       #     if( fromCamp.getUpgradeCost() > (mc-5) ):
+       #         self.gamestate.upgradeCamp(fromCamp)
+            
 
     def start(self):
         """ the main game routine """

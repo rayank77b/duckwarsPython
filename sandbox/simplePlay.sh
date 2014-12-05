@@ -1,10 +1,14 @@
 #java -jar duckwars.jar -sim maps/01.txt -mn results/test -ts 400 -c "java -jar SpawnBot.jar" -c "java -jar ModeBot.jar" -c "java -jar RndBot.jar" -c "python ../AfrankBot.py" -show
 #java -jar duckwars.jar -sim maps/01.txt -mn results/test -ts 100 -c "java -jar SpawnBot.jar" -c "java -jar ModeBot.jar" -c "java -jar RndBot.jar" -show
 
-java -jar duckwars.jar -sim maps/01.txt -mn results/test \
--ts 10 \
--c "java -jar SpawnBot.jar" \
--c "python ../AfrankBotV01.py" \
--c "java -jar RndBot.jar" \
+java -jar duckwars.jar -sim maps/05.txt -mn results/test \
+-ts 500 \
 -c "python ../AfrankBot.py" \
--show
+-c "python ../AfrankBotV01.py" \
+-c "java -jar SpawnBot.jar" \
+-c "java -jar RndBot.jar" \
+-show \
+# end
+
+
+
