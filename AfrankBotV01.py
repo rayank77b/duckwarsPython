@@ -6,15 +6,14 @@ import time
 __author__ = "Andrej Frank"
 __copyright__ = "Copyright 2014, IT-Designers"
 __license__ = "GPL"
-__version__ = "3.0.2"
+__version__ = "3.0.1"
 __maintainer__ = "Andrej Frank"
 __email__ = "andrej.frank@stz-softwaretechnik.de"
 __status__ = "Beta"
 
 class Distances():
     """ build a matrix of all distances between all camps, 
-        must be do one time in begin of game (first round)
-        after the build ass search are staticaly and very fast"""
+        must be do one time in begin of game (first round)"""
     def __init__(self, camps):
         """ calculate for all camps an array [][], ditances.
             the matrix has then the distances beetwen the camps"""
@@ -59,58 +58,47 @@ class Distances():
                 c=o
         return c
 
-
+def sendMenIfFull(gs, fromCamp, toCamp):
+    if(fromCamp.getMancount()>(fromCamp.getMaxMancount()-2)):
+        sendMen = (fromCamp.getMancount()*4)/5
+        gs.issueOrder(fromCamp, toCamp, sendMen)
 
 class AfrankBot1(IBot):
     def __init__(self):
-        self.firstTurn = True
-        self.distances = None
-        self.gamestate = None
-        self.DEBUG = True
-        if self.DEBUG == True:
-            self.f = open("/tmp/afrankbotlog.txt", 'a')
+        self.firstTurn=True
+        self.distances=None
+        #self.f = open("/tmp/afrankbotlog.txt", 'a')
     
     def doTurn(self, gamestate):
-        self.gamestate = gamestate
         if(self.firstTurn):
         # berechne alles, was statisch ist, bzw welche map, welche strategie
             #start = time.time()
             allcamps=gamestate.getCamps()
             self.dist = Distances(allcamps)
             self.firstTurn=False
-            self.start()
+            self.start(gamestate)
             #end = time.time()
             #self.logme("start first turn: time: %d"%(end-start))
         else:
-            self.start()
+            self.start(gamestate)
 
-    def sendMen(self, fromCamp, toCamp):
-        mc = fromCamp.getMancount()
-        cost = self.gamestate.calculateTravelCost(fromCamp, toCamp)
-        self.logme("cost: %d"%cost)
-        if( mc > (fromCamp.getMaxMancount()-2)):   # falls voll sende 4/5 
-            send = (mc*4)/5
-            self.gamestate.issueOrder(fromCamp, toCamp, send)
-        elif(toCamp.getMancount()< (mc-cost-2)):
-            self.gamestate.issueOrder(fromCamp, toCamp, (mc-2))
 
-    def start(self):
+    def start(self, gamestate):
         """ the main game routine """
-        camps = self.gamestate.getCamps()
-        mycamps = self.gamestate.getMyCamps()
+        camps = gamestate.getCamps()
+        mycamps = gamestate.getMyCamps()
         for c in mycamps:
-            n = self.dist.getClosestOtherCamp(self.gamestate, c.getID())
+            n = self.dist.getClosestOtherCamp(gamestate, c.getID())
             if(n!=None):
-                self.sendMen(c, n)
+                    sendMenIfFull(gamestate, c, n)
 
 
-    def logme(self, message):
-        if self.DEBUG == True:
-            self.f.write(message+"\n")
-            self.f.flush()
+#    def logme(self, message):
+#        self.f.write(message+"\n")
+#        self.f.flush()
         
     def getName(self):
-        return "AfrankBotV02|PythonTeam"
+        return "AfrankBotV01|PythonTeam"
 
 
 if __name__ == "__main__":
