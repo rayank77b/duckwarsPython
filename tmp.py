@@ -1,48 +1,32 @@
-class Distances():
-    def __init__(self, camps):
-        """ Constructor
-            calculate for all camps an array [][], ditances.
-            the matrix has then the distances beetwen the camps"""
-        self.camps_size=len(camps)
-        self.distances= [[9999999 for col in range(self.camps_size)] for row in range(self.camps_size)]
-        for x in range(self.camps_size):
-            for y in range(self.camps_size):
-                if(x!=y):
-                    self.distances[x][y]=self.calculate(camps[x], camps[y])
-                
-    def calculate(self, s, d):
-        dx = s.getX() - d.getX()
-        dy = s.getY() - d.getY()
-        return int(dx * dx + dy * dy)
 
-    def out(self):
-        for x in range(self.camps_size):
-            print self.distances[x]
-
-    def get(self, myid, campid):
-        return self.distances[myid][campid]
-
-    def getMin(self, id):
-        """ return the distance of two camps"""
-        return min(self.distances[id])
-    
-    def getNearestId(self, id):
-        """return the id of the nearest capmp with id"""
-        m = min(self.distances[id])
-        return self.distances[id].index(m)
-
-    def getNextOtherCamp(self, gs, id):
-        """ return the id of the neares camp, which not belong to me"""
-        ocs = gs.getNotMyCamps()
-        c=None
-        dis=9999999
-        #print distances
-        for o in ocs:
-            d = self.get(id, o.getID())
-            if d<dis :
-                dis=d
-                c=o
-        return c
+    def sendMen(self, fromCamp, toCamp):
+        mc = fromCamp.getMancount()
+        travel_cost = self.gamestate.calculateTravelCost(fromCamp, toCamp)
+        upgrade_cost = fromCamp.getUpgradeCost()
+        #self.logme("travelcost: %d\nupgradecost: %d\n"%(travel_cost, upgrade_cost))
+        
+        if( mc > (fromCamp.getMaxMancount()-2)):   # falls voll sende 4/5 
+            send = (mc*4)/5
+            self.gamestate.issueOrder(fromCamp, toCamp, send)
+        elif((toCamp.getMancount()+travel_cost)< (mc-2)):
+            self.gamestate.issueOrder(fromCamp, toCamp, (mc-2))
+       # elif( fromCamp.getCanBeUpgraded()):
+       #     if( fromCamp.getUpgradeCost() > (mc-5) ):
+       #         self.gamestate.upgradeCamp(fromCamp)
+       
+               for c in mycamps:
+            if self.isCampAttacked(c):
+                self.P1_CampGetAttacked(c)
+            elif self.isCampFull(c):
+                if self.needSomeOneHelp(c):
+                    self.P2_sendHelp(c):
+                elif self.upgradable(c):
+                    self.P3_upgrade(c)
+                else:
+                    self.sendNextAttack(c, camps)
+            else:
+                if self.upgradeable(c):
+                    self.P3_upgrade(c)
 
 
 def sendHalfMenIfFull(gs, fromCamp, toCamp):
