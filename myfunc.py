@@ -5,7 +5,7 @@ def getAllArmy(gs):
     cnt = gs.getNumArmies()
     armies = []
     for x in range(cnt):
-        armies.append(self.gamestate.getArmy(x))
+        armies.append(gs.getArmy(x))
     return armies
 
 def getArmiesAttackedCamp(gs, c):
@@ -13,7 +13,7 @@ def getArmiesAttackedCamp(gs, c):
     dest = c.getID()
     armies = []
     for x in range(cnt):
-        a = self.gamestate.getArmy(x)
+        a = gs.getArmy(x)
         if a.getOwner() != 0:  # meine Armee ist Zero ID
             if a.getDestination() == dest:
                 armies.append(a)
@@ -24,12 +24,38 @@ def isCampAttacked(gs, c):
     cnt = gs.getNumArmies()
     dest = c.getID()
     for x in range(cnt):
-        a = self.gamestate.getArmy(x)
+        a = gs.getArmy(x)
         if a.getOwner() != 0:  # meine Armee ist Zero ID
             if a.getDestination() == dest:
                 return True
     return False
+
+
+def summeAfterNRounds(camp_id, rounds, camps):
     
+
+def simulate(attacks, camps, rounds):
+    summe=[]
+    for attack in attacks:
+        camp_summe = 0  
+        for cmps in attack:
+            camp_id = cmps[0]
+            rate = camps[camp_id].getGrowthrate()
+            camp_summe = camp_summe + camps[camp_id].getMancount()
+            ids=[x for x in cmps if x!=0]  # first number ist the id of the camp
+            # zur zeit ohne round trip, armee kommt sofort an
+            if len(ids) > 1:
+                for i in range(1,len(ids)):
+                    cnt_attack = ids[i]
+                    camp_summe = camp_summe - cnt_attack
+                    
+            for x in range(rounds):
+            
+                
+                    
+
+
+
 #    def P1_CampGetAttacked(self, c):
 #        enemies = self.getArmiesAttackedCamp(c)
 #        #at moment we simple wait
