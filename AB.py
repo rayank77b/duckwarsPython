@@ -35,7 +35,7 @@ class AfrankBot1(IBot):
         
     def start(self):
         """ the main game routine """
-        strategySmall(self.gamestate, self.distances)
+        strategySmall(self.gamestate, self.distances, self)
         
                     
     def logme(self, message):
