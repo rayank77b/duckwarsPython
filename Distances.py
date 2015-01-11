@@ -23,16 +23,33 @@ class Distances():
 
     def get(self, myid, campid):
         return self.distances[myid][campid]
+    
+    def getList(self, myid):
+        return self.distances[myid][:]
 
-    def getClosest(self, id):
-        """ return the closest camp to camp with id. """
+    def getMinDistance(self, id):
+        """ return the min Distances to camp with id. """
         return min(self.distances[id])
     
     def getClosestId(self, id):
         """return the id of the nearest capmp with id"""
         m = min(self.distances[id])
         return self.distances[id].index(m)
-
+    
+    def getClosestMyCamp(self, gs, id):
+        """ return the id of the closest camp, which  belong to me"""
+        ocs = gs.getMyCamps()
+        c=None
+        dis=9999999
+        if len(ocs) == 1:
+            return None
+        for o in ocs:
+            d = self.get(id, o.getID())
+            if d<dis :
+                dis=d
+                c=o
+        return c
+            
     def getClosestOtherCamp(self, gs, id):
         """ return the id of the closest camp, which not belong to me"""
         ocs = gs.getNotMyCamps()

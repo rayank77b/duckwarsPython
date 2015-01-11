@@ -7,6 +7,11 @@ def strategySmall(gs, dist, bot):
     for c in mycamps:
         cnt = c.getMancount()
         maxcnt = c.getMaxMancount() - 2
+        # falls irgendwo schon meine eigene in der naehe ist sende lieber dorthin
+        myNextCamp = dist.getClosestMyCamp(gs, c.getID())
+        if myNextCamp != None:
+            if(cnt > maxcnt*0.8):
+                gs.issueOrder(c, myNextCamp, cnt*0.5)
         if cnt > maxcnt:
             sendMen = cnt * 0.8
             otherCamp =dist.getClosestOtherCamp(gs, c.getID())
@@ -16,6 +21,7 @@ def strategySmall(gs, dist, bot):
                     sendMen = maxOther + 2
                 cntOther = otherCamp.getMancount()
                 if cntOther > cnt: # i will lost, thus send some men to other my camp
+                    return 0
                 gs.issueOrder(c, otherCamp, sendMen)
 
 
