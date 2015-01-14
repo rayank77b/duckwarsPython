@@ -8,7 +8,7 @@ import time
 __author__ = "Andrej Frank"
 __copyright__ = "Copyright 2014, IT-Designers"
 __license__ = "GPL"
-__version__ = "4.0.2"
+__version__ = "4.0.3"
 __maintainer__ = "Andrej Frank"
 __email__ = "andrej.frank@stz-softwaretechnik.de"
 __status__ = "Beta"

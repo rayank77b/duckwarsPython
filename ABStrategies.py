@@ -2,6 +2,24 @@
 
 import random
 
+def getAllArmies(gs):
+    cnt = gs.getNumArmies()
+    armies = []
+    for x in range(cnt):
+        armies.append(gs.getArmy(x))
+    return armies
+
+def isCampAttacked(gs, c):
+    """get information about attack to Camp c"""
+    cnt = gs.getNumArmies()
+    dest = c.getID()
+    for x in range(cnt):
+        a = gs.getArmy(x)
+        if a.getOwner() != 1:  # meine Armee ist Zero ID
+            if a.getDestination() == dest:
+                return True
+    return False
+
 def upgradeSmallIfSmaller(gs,c,cnt, size):
     if c.getSize() <= size:
         return upgradeCampIfPossible(gs,c, cnt)
@@ -43,6 +61,40 @@ def sendIfWeHaveAbout250Mens(gs,c,cnt):
             return True
     return False
 
+def cntGreatMax(gs, dist, c, cnt, maxcnt):
+    if cnt > maxcnt:
+        sendMen = cnt * 0.95
+        otherCamp =dist.getClosestOtherCamp(gs, c.getID())
+        if otherCamp != None:
+            maxOther = otherCamp.getMaxMancount()
+            if ( sendMen > maxOther ):
+                sendMen = maxOther + 5
+            cntOther = otherCamp.getMancount()
+            if cntOther+5 > cnt: # i will lost, thus send some men to other my camp
+                return upgradeCampIfPossible(gs,c, cnt)
+            else:
+                gs.issueOrder(c, otherCamp, sendMen)
+                return True
+    return False
+
+def sendIfMaxToOneWhichWeCanWin(gs,dist,  c,cnt, maxcnt):
+    # if i get attacked, i should wait
+    if isCampAttacked(gs, c):
+        return False
+    if cnt>=maxcnt :
+        otherCamp =dist.getClosestOtherCamp(gs, c.getID())
+        if otherCamp != None:
+            gs.issueOrder(c, otherCamp, cnt)
+            return True
+    if cnt>=maxcnt :
+        hostile = gs.getNotMyCamps()
+        for h in hostile:
+            hcnt = h.getMancount()
+            travel = gs.calculateTravelCost(c,h)
+            if cnt > (hcnt+travel):
+                gs.issueOrder(c, h, cnt)
+                return True
+    return False
 
 def strategySmall(gs, dist, bot):
     """ in this strategy we have very low count of teichs """
@@ -61,22 +113,10 @@ def strategySmall(gs, dist, bot):
         elif foundNextWeakAndAttack(gs,dist,c,cnt):
             pass
         # falls genug soldaten da sind
-        elif cnt > maxcnt:
-            #bot.logme("get cnt max")
-            sendMen = cnt * 0.95
-            otherCamp =dist.getClosestOtherCamp(gs, c.getID())
-            if otherCamp != None:
-                #bot.logme("found other camp")
-                maxOther = otherCamp.getMaxMancount()
-                if ( sendMen > maxOther ):
-                    sendMen = maxOther + 5
-                cntOther = otherCamp.getMancount()
-                #bot.logme("cntOther: %d,  cnt: %d"%(cntOther,cnt))
-                if cntOther+5 > cnt: # i will lost, thus send some men to other my camp
-                    #bot.logme("we lost")
-                    upgradeCampIfPossible(gs,c, cnt)
-                else:
-                    gs.issueOrder(c, otherCamp, sendMen)
+        elif cntGreatMax(gs, dist, c, cnt, maxcnt):
+            pass
+        elif sendIfMaxToOneWhichWeCanWin(gs,dist, c,cnt, maxcnt+2):
+            pass
 
 
 #    def sendNextAttack(self, myCamp):
