@@ -8,7 +8,7 @@ import time
 __author__ = "Andrej Frank"
 __copyright__ = "Copyright 2014, IT-Designers"
 __license__ = "GPL"
-__version__ = "4.0.0"
+__version__ = "4.0.2"
 __maintainer__ = "Andrej Frank"
 __email__ = "andrej.frank@stz-softwaretechnik.de"
 __status__ = "Beta"
@@ -18,7 +18,7 @@ class AfrankBot1(IBot):
         self.firstTurn = True
         self.distances = None
         self.gamestate = None
-        self.DEBUG = True
+        self.DEBUG = False
         if self.DEBUG == True:
             self.f = open("/tmp/afrankbotlog.txt", 'a')
     
