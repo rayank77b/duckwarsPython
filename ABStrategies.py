@@ -1,6 +1,7 @@
 #ABStrategies.py
 
 import random
+import math
 
 def getAllArmies(gs):
     cnt = gs.getNumArmies()
@@ -96,7 +97,9 @@ def sendIfMaxToOneWhichWeCanWin(gs,dist,  c,cnt, maxcnt):
                 return True
     return False
 
-def strategySmall(gs, dist, bot):
+#############################################################################
+
+def strategyFull(gs, dist, bot):
     """ in this strategy we have very low count of teichs """
     mycamps = gs.getMyCamps()
     for c in mycamps:
@@ -116,6 +119,26 @@ def strategySmall(gs, dist, bot):
         elif cntGreatMax(gs, dist, c, cnt, maxcnt):
             pass
         elif sendIfMaxToOneWhichWeCanWin(gs,dist, c,cnt, maxcnt+2):
+            pass
+
+def strategySmall(gs, dist, bot):
+    """ in this strategy we have very low count of teichs """
+    mycamps = gs.getMyCamps()
+    for c in mycamps:
+        cnt = c.getMancount()
+        maxcnt = c.getMaxMancount() - 2
+        if sendIfWeHaveAbout250Mens(gs,c,cnt):
+            pass
+        elif upgradeSmallIfSmaller(gs,c,cnt,2):
+            pass
+        # irgendwo schon meine eigene in der naehe ist sende lieber dorthin, mit 50% wahrscheinlichkeit
+        elif sendHelp(gs,dist,c,cnt,maxcnt):
+            pass
+        # ist jemmand in der naehe den wir ueberrennen koennen?
+        elif foundNextWeakAndAttack(gs,dist,c,cnt):
+            pass
+        # falls genug soldaten da sind
+        elif cntGreatMax(gs, dist, c, cnt, maxcnt):
             pass
 
 

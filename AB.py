@@ -1,6 +1,7 @@
 from DuckwarsApi import *
 from Distances import *
 from ABStrategies import *
+from ABCampInfo import *
 
 import math
 import time
@@ -19,6 +20,7 @@ class AfrankBot1(IBot):
         self.distances = None
         self.gamestate = None
         self.DEBUG = False
+        self.campInfo = None
         if self.DEBUG == True:
             self.f = open("/tmp/afrankbotlog.txt", 'a')
     
@@ -28,14 +30,20 @@ class AfrankBot1(IBot):
         # berechne alles, was statisch ist, bzw welche map, welche strategie
             allcamps=gamestate.getCamps()
             self.distances = Distances(allcamps)
-            self.firstTurn=False
+            self.firstTurn = False
+            self.campInfo = CampInfo(allcamps, gamestate)
             self.start()
         else:
             self.start()
         
     def start(self):
         """ the main game routine """
-        strategySmall(self.gamestate, self.distances, self)
+        if self.campInfo.allAreMaxSize():  # map 06.txt
+            #self.logme("map 06 strategy")
+            strategyFull(self.gamestate, self.distances, self)
+        else:
+            #self.logme("other strategy")
+            strategySmall(self.gamestate, self.distances, self)
         
                     
     def logme(self, message):
