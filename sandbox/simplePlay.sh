@@ -1,6 +1,20 @@
 #java -jar duckwars.jar -sim maps/01.txt -mn results/test -ts 400 -c "java -jar SpawnBot.jar" -c "java -jar ModeBot.jar" -c "java -jar RndBot.jar" -c "python ../AfrankBot.py" -show
 #java -jar duckwars.jar -sim maps/01.txt -mn results/test -ts 100 -c "java -jar SpawnBot.jar" -c "java -jar ModeBot.jar" -c "java -jar RndBot.jar" -show
 
+
+for l in $(seq 6 6)
+do
+java -jar duckwars.jar -sim maps/0$l.txt -mn results/test \
+-ts 1200 \
+-c "python ../AB.py" \
+-c "java -jar RndBot.jar" \
+-c "java -jar RndBot.jar" \
+-show 
+done
+
+exit 0
+
+
 MYBOT="python ../AB.py"
 AFR="python ../AfrankBotV01.py"
 SPAWN="java -jar SpawnBot.jar"

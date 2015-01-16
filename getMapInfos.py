@@ -46,33 +46,48 @@ class GameState:
         dy = source.getY() - destination.getY();
         return int(math.ceil(math.sqrt(dx * dx + dy * dy)))
 ################################################################################
+    
+def out(ci):
+    campsCount = len(ci.camps)
+    print "camps: ", campsCount,":    myCamps: ", ci.myCampCount, " %2.0f %%"%((ci.myCampCount*100.0)/campsCount)
+    print "max X: ", ci.maxX, "   max Y: ", ci.maxY
+    print "vert : ", ci.getVerteilungMin()
+    print "vert : ", ci.getVerteilungNormiertMin()
+    print "midle length: ", sum(ci.lens)/len(ci.lens)
+    print "max   length: ", max(ci.lens)
+    print "min   length: ", min(ci.lens)
+    print "midle min len: ", ci.minlens
+    print "mm len: %.2f"%ci.mml
+    print "midle Len: %.2f"%ci.ml
+    print "coefizent: %.2f"%ci.coe
+    print "all max size: ", ci.allMaxSize
+#################################
 
 # einlesen
 #C 11 3 0 5 2
 #C X  Y Own cnt size
-    
-#    def out(self):
-#        campsCount = len(self.camps)
-#        print "camps: ", campsCount,":    myCamps: ", self.myCampCount, " %2.0f %%"%((self.myCampCount*100.0)/campsCount)
-#        print "max X: ", self.maxX, "   max Y: ", self.maxY
-#        print "vert : ", self.getVerteilungMin()
-#        print "vert : ", self.getVerteilungNormiertMin()
-#        print "midle length: ", sum(self.lens)/len(self.lens)
-#        print "max   length: ", max(self.lens)
-#        print "min   length: ", min(self.lens)
-#        print "midle min len: ", self.minlens
-#        print "mm len: %.2f"%self.mml
-#        print "midle Len: %.2f"%self.ml
-#        print "coefizent: %.2f"%self.coe
-#        print "all max size: ", self.allMaxSize
-#################################
+
+def getCampList(filename, gs):
+    liste=[]
+    cntid=0
+    fd = open(filename, "r")
+    for line in fd.readlines():
+        if "C" in line:
+            line.strip()
+            tmp,posX,posY, campOwner, campMancount, campSize = line.split(" ")
+            #print tmp, posX, posY, campOwner, campMancount, campSize
+            liste.append(Camp(cntid, campOwner, campMancount, campSize, posX, posY, gs))
+            cntid=cntid+1
+    fd.close()
+    return liste
 
 def getInfo(filename):
     #print(filename)
     gs = GameState( "blub", [], "ENV 23")
-    campInfo = getCampList(filename, gs)
+    campListe = getCampList(filename, gs)
+    campInfo = CampInfo(campListe, gs)
     print filename
-    #campInfo.out()
+    out(campInfo)
     print
 
 
@@ -80,14 +95,16 @@ def getInfo(filename):
 
 # main loop
 #getInfo("sandbox/maps/01.txt")
-#getInfo("sandbox/maps/06.txt")
-#getInfo("sandbox/maps/12.txt")
-#getInfo("sandbox/maps/25.txt")
-#getInfo("sandbox/maps/59.txt")
-for root, dirs, files in os.walk(path, topdown=False):
-    for name in files:
-        filename = os.path.join(root, name)
-        getInfo(filename)
+getInfo("sandbox/maps/06.txt")
+getInfo("sandbox/maps/12.txt")
+getInfo("sandbox/maps/25.txt")
+getInfo("sandbox/maps/59.txt")
+
+
+#for root, dirs, files in os.walk(path, topdown=False):
+#    for name in files:
+#        filename = os.path.join(root, name)
+#        getInfo(filename)
 
 
 
